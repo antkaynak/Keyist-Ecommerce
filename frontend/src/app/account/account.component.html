@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-md-12" style="text-align: center">
+      <h3>My Account</h3>
+    </div>
+  </div>
+  <div class="row p2 pb-4 mt-5" style="min-height: 40vh">
+    <div class="col-md-3">
+      <div class="w-100 title"><a routerLink="/account/dashboard" routerLinkActive="active" class="btn">Panel</a></div>
+      <div class="w-100 title"><a routerLink="/account/orders" routerLinkActive="active" class="btn">Orders</a></div>
+      <div class="w-100 title"><a routerLink="/account/details" routerLinkActive="active" class="btn">Account
+        Details</a></div>
+      <div class="w-100 title"><a routerLink="/faq" class="btn">FAQ</a></div>
+    </div>
+    <div class="col-md-9 account pb-4">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,95 @@
+<div *ngIf="fetchError" class="row">
+  <div class="col-md-12 col-12 pb-4">
+    <div class="alert-warning">An error occurred. Please try again.</div>
+  </div>
+</div>
+<div *ngIf="noOrders" class="row">
+  <div class="col-md-12 col-12 m-auto pb-4">
+    <p class="p-0 m-0" style="color: #5E6977">You do not have any orders. <a routerLink="/browse">Browse now!</a></p>
+  </div>
+</div>
+<div class="row">
+  <div class="col md-12 col-12">
+    <ngb-pagination *ngIf="!noOrders" [collectionSize]="collectionSize" [pageSize]="pageSize" [(page)]="page"
+                    [rotate]="true" [maxSize]="5" (pageChange)="pageNavigation()" class="d-flex justify-content-end"
+                    aria-label="pagination"></ngb-pagination>
+  </div>
+</div>
+<div *ngIf="inlineLoading" class="loader"></div>
+<div *ngIf="!fetchError" class="row">
+  <div *ngFor="let order of orders" class="col-md-12 col-12 pb-4 ">
+    <div class="title pb-1">{{order.date }}</div>
+    <div class="row pt-2">
+      <div class="col-md-6 col-12" style="border-right: 1px solid #E1E8EE;">
+
+        <div class="row">
+          <div class="col-md-6 col-6"><p class="details"><span> Ship Name: </span>{{order.shipName}}</p></div>
+          <div class="col-md-6 col-6"><p class="details"><span>Email:</span> {{order.email}}</p></div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-6"><p class="details"><span>Number: </span>{{order.phone}}</p></div>
+          <div class="col-md-6 col-6"><p class="details"><span> City:</span> {{order.city}}</p></div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-6"><p class="details"><span>Ship Address 1:</span> {{order.shipAddress}}</p>
+          </div>
+          <div class="col-md-6 col-6"><p class="details"><span> State: </span>{{order.state}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-6"><p class="details"><span>Ship Address 2:</span> {{order.shipAddress2}}</p>
+          </div>
+          <div class="col-md-6 col-6"><p class="details"><span> Zip:</span> {{order.zip}}</p></div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-6"><p class="details"><span> Country: </span> {{order.country}}</p></div>
+          <div class="col-md-6 col-6"><p class="details"><span>Final Price </span>${{ order.totalPrice }}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-6"><p class="details"><span> Shipping Status: </span> {{order.shipped == 0?
+            'Packaging' : 'Shipped'}}</p>
+          </div>
+          <div class="col-md-6 col-6"><p class="details"><span>Cargo Price </span>${{ order.totalCargoPrice }}</p>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-6"><p class="details" *ngIf="order.orderDiscount != null "><span>Discount: </span>
+            {{order.orderDiscount.discountPercent + ' Code' + order.orderDiscount.code}}</p>
+          </div>
+          <div class="col-md-6 col-6"><p class="details" *ngIf="order.shipped == 1"><span>Tracking Number:</span>
+            {{order.trackingNumber}}</p>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-md-6 col-12">
+        <div class="row" style="height: 300px; overflow-y: scroll;">
+          <div *ngFor="let orderDetail of order.orderDetailsList" class="col-md-12 col-12 pb-4">
+            <div class="row">
+              <div class="col-md-4 col-4">
+                <img src="{{orderDetail.productDisplay.thumb}}" alt="" style="height: 100px; width: 100px;">
+              </div>
+              <div class="col-md-8 col-8">
+                <div class="row">
+                  <div class="col-md-6 col-6">
+                    <p class="p-0 mb-0"> {{orderDetail.productDisplay.name}}</p>
+                    <p class="p-0 mt-0 details-cat"> {{orderDetail.productDisplay.productCategory.name}}</p>
+                  </div>
+                  <div class="col-md-6 col-6"><p> Amount: {{orderDetail.amount}}</p></div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 col-6"><p> Price: ${{orderDetail.productDisplay.price}}</p></div>
+                  <div class="col-md-6 col-6"><p> Cargo: ${{orderDetail.productDisplay.cargoPrice}}</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <hr>
+    </div>
+  </div>
+</div>

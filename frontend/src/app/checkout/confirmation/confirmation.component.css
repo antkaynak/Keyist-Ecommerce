@@ -1,0 +1,39 @@
+.confirm {
+  background: #FFFFFF;
+  box-shadow: 1px 2px 3px 0 rgba(0, 0, 0, 0.10);
+  border-radius: 6px;
+  padding-top: 10px !important;
+}
+
+.title {
+  height: 60px;
+  border-bottom: 1px solid #E1E8EE;
+  padding: 20px 30px;
+  color: #5E6977;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+span {
+  font-size: 18px;
+  color: #43484D;
+  font-weight: 500;
+}
+
+.info {
+  font-size: 16px;
+  color: #43484D;
+  font-weight: 300;
+}
+
+.disclaimer {
+  font-size: 15px;
+  color: #86939E;
+  font-weight: 300;
+}
+
+@media (max-width: 800px) {
+  .container-fluid {
+    width: 95% !important;
+  }
+}

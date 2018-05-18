@@ -1,0 +1,119 @@
+<div class="container-fluid" style="width: 70%">
+  <div class="row mt-5">
+    <div class="col-md-12">
+      <p>
+        <ngb-progressbar type="info" [value]="60" height=".8rem"><b>2 of 3</b></ngb-progressbar>
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <a routerLink="/checkout/form" class="btn" style="color: #5E6977;"><i class="fa fa-arrow-left"></i> Back to
+        form</a>
+    </div>
+  </div>
+  <div class="row payment-form-container m-auto">
+    <div class="payment-form p-5 pt-1 col-md-6">
+      <form [formGroup]="paymentForm" (ngSubmit)="onSubmitPaymentForm()">
+        <div class="title">Card Information</div>
+        <div class="form-group">
+          <label for="cardNo"></label>
+          <input type="number"
+                 id="cardNo"
+                 class="form-control"
+                 name="cardNo"
+                 placeholder="Card Number"
+                 formControlName="cardNo"
+                 [maxlength]="20"
+          >
+          <span *ngIf="paymentForm.get('cardNo').invalid && paymentForm.get('cardNo').touched">
+                    <span *ngIf="paymentForm.get('cardNo').errors['required']" class="alert-danger">This field is required!</span>
+                  </span>
+
+        </div>
+        <div class="form-group">
+          <label for="cardOwner"></label>
+          <input type="text"
+                 id="cardOwner"
+                 class="form-control"
+                 name="cardOwner"
+                 placeholder="Card Owner"
+                 formControlName="cardOwner"
+                 [maxlength]="240"
+          >
+          <span *ngIf="paymentForm.get('cardOwner').invalid && paymentForm.get('cardOwner').touched">
+                    <span *ngIf="paymentForm.get('cardOwner').errors['required']" class="alert-danger">This field is required!</span>
+                  </span>
+
+        </div>
+        <div formGroupName="cardExp">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="month"></label>
+                <select name="month" id="month" class="form-control" [formControlName]="'month'">
+                  <option *ngFor="let number of [1,2,3,4,5,6,7,8,9,10,11,12]" value="{{number}}">{{number}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="year"></label>
+                <select name="year" id="year" class="form-control" [formControlName]="'year'">
+                  <option
+                    *ngFor="let number of [2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030,2031,2032,2033]"
+                    value="{{number}}">{{number}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <span *ngIf="paymentForm.get('cardExp').invalid && paymentForm.get('cardExp').touched">
+                   These fields are required!
+        </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cardCCV"></label>
+          <input type="number"
+                 id="cardCCV"
+                 class="form-control"
+                 name="cardCCV"
+                 placeholder="CCV"
+                 formControlName="cardCCV"
+                 [maxlength]="3"
+          >
+          <span *ngIf="paymentForm.get('cardCCV').invalid && paymentForm.get('cardCCV').touched">
+                    <span *ngIf="paymentForm.get('cardCCV').errors['required']" class="alert-danger">This field is required!</span>
+                  </span>
+
+        </div>
+
+        <button class="btn btn-info" style="width: 100%" type="submit"
+                [disabled]="paymentForm.invalid || paymentForm.pending">
+          Continue
+        </button>
+
+      </form>
+    </div>
+
+    <div class="p-5 pt-1 col-md-6">
+      <div class="row">
+        <div class="col-md-6 p-5">
+          <img style="width: 120px; height: 100px" src="../../../assets/mastercard.png" alt="">
+        </div>
+        <div class="col-md-6 p-5">
+          <img style="width: 120px; height: 100px" src="../../../assets/visa.png" alt="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 p-5">
+          <img style="width: 120px; height: 100px" src="../../../assets/amex.png" alt="">
+        </div>
+        <div class="col-md-6 p-5">
+          <img style="width: 120px; height: 100px" src="../../../assets/oo.png" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

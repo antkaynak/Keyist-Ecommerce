@@ -1,0 +1,176 @@
+<div class="row">
+  <div class="loader" *ngIf="formLoading"></div>
+  <div class="col-md-11 m-auto" *ngIf="!formHidden && !formLoading">
+    <form [formGroup]="detailsForm" (ngSubmit)="onSubmitDetailsForm()">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="firstName"></label>
+            <input type="text"
+                   id="firstName"
+                   class="form-control"
+                   name="firstName"
+                   placeholder="First Name"
+                   formControlName="firstName"
+                   [maxlength]="26"
+            >
+            <span *ngIf="detailsForm.get('firstName').invalid && detailsForm.get('firstName').touched">
+                    <span class="alert-danger">Please enter a valid first name!</span>
+                  </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="lastName"></label>
+            <input type="text"
+                   id="lastName"
+                   class="form-control"
+                   name="lastName"
+                   placeholder="Last Name"
+                   formControlName="lastName"
+                   [maxlength]="26"
+            >
+            <span *ngIf="detailsForm.get('lastName').invalid && detailsForm.get('lastName').touched">
+                    <span class="alert-danger">Please enter a valid last name!</span>
+                  </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="address"></label>
+        <input type="text"
+               id="address"
+               class="form-control"
+               name="address"
+               placeholder="Address 1"
+               formControlName="address"
+               [maxlength]="240"
+        >
+        <span *ngIf="detailsForm.get('address').invalid && detailsForm.get('address').touched">
+                    <span class="alert-danger">Please enter a valid address!</span>
+                  </span>
+      </div>
+
+      <div class="form-group">
+        <label for="address2"></label>
+        <input type="text"
+               id="address2"
+               class="form-control"
+               name="address2"
+               placeholder="Address 2"
+               formControlName="address2"
+               [maxlength]="240"
+        >
+        <span *ngIf="detailsForm.get('address2').invalid && detailsForm.get('address2').touched">
+                    <span class="alert-danger">Please enter a valid address!</span>
+                  </span>
+      </div>
+
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="city"></label>
+              <input type="text"
+                     id="city"
+                     class="form-control"
+                     name="city"
+                     placeholder="City"
+                     formControlName="city"
+                     [maxlength]="100"
+              >
+              <span *ngIf="detailsForm.get('city').invalid && detailsForm.get('city').touched">
+                    <span class="alert-danger">Please enter a valid city!</span>
+                  </span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="state"></label>
+              <input type="text"
+                     id="state"
+                     class="form-control"
+                     name="state"
+                     placeholder="State"
+                     formControlName="state"
+                     [maxlength]="40"
+              >
+              <span *ngIf="detailsForm.get('state').invalid && detailsForm.get('state').touched">
+                    <span class="alert-danger">Please enter a valid state</span>
+                  </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="zip"></label>
+              <input type="number"
+                     id="zip"
+                     class="form-control"
+                     name="zip"
+                     placeholder="Zip"
+                     formControlName="zip"
+                     [maxlength]="6"
+                     [minlength]="5"
+              >
+              <span *ngIf="detailsForm.get('zip').invalid && detailsForm.get('zip').touched">
+                    <span class="alert-danger">Please enter a valid zip number!</span>
+                  </span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="country"></label>
+              <input type="text"
+                     id="country"
+                     class="form-control"
+                     name="country"
+                     placeholder="Country"
+                     formControlName="country"
+                     [maxlength]="40"
+              >
+              <span *ngIf="detailsForm.get('country').invalid && detailsForm.get('country').touched">
+                    <span class="alert-danger">Please enter a valid country!</span>
+                  </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label for="phone"></label>
+        <input type="text"
+               id="phone"
+               class="form-control"
+               name="phone"
+               placeholder="Phone"
+               formControlName="phone"
+               [maxlength]="11"
+        >
+        <span *ngIf="detailsForm.get('phone').invalid && detailsForm.get('phone').touched">
+                    <span class="alert-danger">Please enter a valid phone number!</span>
+                  </span>
+      </div>
+
+
+      <div class="row w-100">
+        <div class="col-md-8 offset-md-4" style="text-align: right">
+          <div class="loader" style="left: 75%" *ngIf="inlineLoading"></div>
+          <button class="btn btn-info" style="width: 40%" type="submit"
+                  [style.display]="inlineLoading ? 'none' : 'inline-block'"
+                  [disabled]="detailsForm.invalid || detailsForm.pending">
+            Save
+          </button>
+        </div>
+      </div>
+
+
+    </form>
+  </div>
+</div>

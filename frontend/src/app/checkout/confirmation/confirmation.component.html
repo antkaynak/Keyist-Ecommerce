@@ -1,0 +1,169 @@
+<div class="container-fluid" style="width: 70%">
+  <div class="row mt-5">
+    <div class="col-md-12">
+      <p>
+        <ngb-progressbar type="info" [value]="100" height=".8rem"><b>3 of 3</b></ngb-progressbar>
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <a routerLink="/checkout/payment" class="btn" style="color: #5E6977;"><i class="fa fa-arrow-left"></i> Back to
+        payment</a>
+    </div>
+  </div>
+  <div *ngIf="innerLoading" class="loader"></div>
+  <div *ngIf="innerLoading" style="min-height: 50vh"></div>
+  <div *ngIf="!innerLoading" class="row m-auto">
+    <div class="col-md-8">
+      <div class="confirm row p-2">
+        <div class="col-md-12">
+          <div *ngIf="fetchedPostOrdersObject != null" class="title">Shipping Information</div>
+          <div class="row pt-2">
+            <div class="col-md-6 col-6">
+              <div class="row">
+                <div class="col-md-4"><span>Ship Name</span></div>
+                <div class="col-md-8"><p class="info p-0 m-0">{{ fetchedPostOrdersObject.shipName }}</p></div>
+              </div>
+            </div>
+            <div class="col-md-6 col-6">
+              <div class="row">
+                <div class="col-md-4"><span>Email</span></div>
+                <div class="col-md-8"><p class="info p-0 m-0">{{ fetchedPostOrdersObject.email }}</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-6">
+              <div class="row">
+                <div class="col-md-4"><span>Address 1</span></div>
+                <div class="col-md-8"><p class="info p-0 m-0">{{ fetchedPostOrdersObject.shipAddress }}</p></div>
+              </div>
+            </div>
+            <div class="col-md-6 col-6">
+              <div class="row">
+                <div class="col-md-4"><span>Address 2</span></div>
+                <div class="col-md-8"><p class="info p-0 m-0">{{ fetchedPostOrdersObject.shipAddress2 }}</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-6">
+              <div class="row">
+                <div class="col-md-4">
+                  <span>City</span>
+                </div>
+                <div class="col-md-8">
+                  <p class="info p-0 m-0">{{ fetchedPostOrdersObject.city }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-6">
+              <div class="row">
+                <div class="col-md-4"><span>State</span></div>
+                <div class="col-md-8"><p class="info p-0 m-0">{{ fetchedPostOrdersObject.state }}</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-6">
+              <div class="row">
+                <div class="col-md-4"><span>Country</span></div>
+                <div class="col-md-8"><p class="info p-0 m-0">{{ fetchedPostOrdersObject.country }}</p></div>
+              </div>
+            </div>
+            <div class="col-md-6 col-6">
+              <div class="row">
+                <div class="col-md-4"><span>Zip</span></div>
+                <div class="col-md-8"><p class="info p-0 m-0">{{ fetchedPostOrdersObject.zip }}</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-6">
+              <div class="row">
+                <div class="col-md-4"><span>Phone</span></div>
+                <div class="col-md-8"><p class="info p-0 m-0">{{ fetchedPostOrdersObject.phone }}</p></div>
+              </div>
+            </div>
+            <div class="col-md-6 col-6">
+              <div class="row">
+                <div class="col-md-4"><span>Cargo Firm</span></div>
+                <div class="col-md-8"><p class="info p-0 m-0">{{ fetchedPostOrdersObject.cargoFirm }}</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="confirm row p-2">
+        <div class="col-md-12">
+          <div *ngIf="fetchedCart != null" class="title">Pricing</div>
+          <div class="row pt-2">
+            <div class="col-md-6 col-6">
+              <div class="row">
+                <div class="col-md-4"><span>Cargo Price</span></div>
+                <div class="col-md-8"><p class="info p-0 m-0">${{ fetchedCart.totalCargoPrice }}</p></div>
+              </div>
+            </div>
+            <div class="col-md-6 col-6">
+              <div class="row">
+                <div class="col-md-4"><span>Grand Total</span></div>
+                <div class="col-md-8"><p class="info p-0 m-0">${{ fetchedCart.totalPrice }}</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+          <span class="disclaimer p-2 mt-5">
+            Disclaimer: This is a demo site. No acquisition and sharing of information will be performed based upon your
+            personal information. Please visit FAQ for your questions.
+          </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="confirm p-2" style="height: 500px; overflow-y: scroll">
+        <p>Lorem ipsum dolor sit amet,
+          consectetur adipisicing elit.
+          Amet est libero reprehenderit?
+          Accusantium aliquam animi corporis
+          deserunt dicta distinctio, dolorem
+          harum id illum impedit ipsam iusto
+          mollitia nam quasi, qui reiciendis sequi
+          similique sit temporibus unde velit veniam
+          voluptas voluptates! Consequatur consequuntur
+          dolorem fugit in quidem quis quo repellendus
+          sapiente soluta, voluptate. Amet animi, architecto
+          atque blanditiis ex exercitationem fugiat id iste,
+          minus non nostrum obcaecati perferendis porro praesentium
+          quod ratione reiciendis repudiandae tempora velit voluptatum?
+          Assumenda fugiat laboriosam maxime minus nobis quas
+          sapiente vero. Adipisci assumenda at consequatur enim
+          et facilis illo labore quidem vitae voluptatum.
+          Consequatur eum fugit in. Accusamus adipisci deleniti
+          deserunt dignissimos dolorem dolores ducimus eaque,
+          hic id iste iusto officia omnis perferendis reiciendis
+          repellat similique sint suscipit tempora velit voluptatem!
+          Asperiores assumenda autem beatae dicta, doloribus iste minima
+          molestias, perferendis quam rem reprehenderit soluta tempora! Ab
+          aperiam magni perspiciatis possimus? Cupiditate eos fugiat harum ipsa,
+          laboriosam, maxime minima obcaecati officiis, quae quaerat veniam
+          voluptatum? Blanditiis consequuntur facere, fugiat id, impedit ipsam
+          iste libero magnam minima, nihil praesentium quaerat quos! Adipisci
+          alias aspernatur culpa doloribus esse facere, illum laboriosam maxime
+          nulla qui rem repudiandae sint suscipit totam veritatis! Ab, ad atque
+          doloremque ducimus eaque obcaecati voluptatibus .
+        </p>
+      </div>
+      <div class="p-2 mt-2">
+        <input #confirm id="confirm" type="checkbox" value="confirm">
+        <label for="confirm">I have read and confirm the terms of service.</label>
+        <button class="btn btn-info" [disabled]="!confirm.checked"
+                [style.display]="innerLoading ? 'none' : 'inline-block'" (click)="openPaymentModal()">PURCHASE
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

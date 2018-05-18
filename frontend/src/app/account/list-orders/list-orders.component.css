@@ -1,0 +1,48 @@
+ngb-pagination /deep/ .page-item .page-link {
+  color: #5E6977;
+}
+
+ngb-pagination /deep/ .page-item.active .page-link {
+  background-color: #5E6977;
+  border-color: #5E6977;
+  color: white;
+
+}
+
+.orders {
+  background: #FFFFFF;
+  box-shadow: 1px 2px 3px 0 rgba(0, 0, 0, 0.10);
+  border-radius: 6px;
+}
+
+.title {
+
+  color: #5E6977;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.details {
+  text-align: center;
+  font-size: 14px;
+  color: #43484D;
+  font-weight: 300;
+}
+
+.details-cat {
+  font-weight: 300;
+  font-size: 14px;
+  color: #86939E;
+}
+
+span {
+  font-size: 16px;
+  color: #43484D;
+  font-weight: 500;
+}
+
+@media only screen and (max-width: 767px) {
+  span {
+    display: block;
+  }
+}

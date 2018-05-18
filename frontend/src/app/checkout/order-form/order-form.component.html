@@ -1,0 +1,203 @@
+<div class="container-fluid" style="width: 70%">
+  <div class="row mt-5">
+    <div class="col-md-12">
+      <p>
+        <ngb-progressbar type="info" [value]="30" height=".8rem"><b>1 of 3</b></ngb-progressbar>
+      </p>
+    </div>
+  </div>
+  <div *ngIf="innerLoading" class="loader"></div>
+  <div *ngIf="innerLoading" style="min-height: 50vh"></div>
+
+  <div *ngIf="!innerLoading" class="address-form-container row m-auto">
+    <div class="address-form p-5 col-md-12">
+      <form [formGroup]="orderForm" (ngSubmit)="onSubmitOrderForm()">
+        <div class="title">Personal Information</div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="shipName"></label>
+              <input type="text"
+                     id="shipName"
+                     class="form-control"
+                     name="shipName"
+                     placeholder="Ship Name"
+                     formControlName="shipName"
+                     [maxlength]="240"
+              >
+              <span *ngIf="orderForm.get('shipName').invalid && orderForm.get('shipName').touched">
+                    <span *ngIf="orderForm.get('shipName').errors['required']" class="alert-danger">This field is required!</span>
+                  </span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="email"></label>
+              <input type="text"
+                     id="email"
+                     class="form-control"
+                     name="email"
+                     placeholder="Email"
+                     formControlName="email"
+                     [maxlength]="240"
+              >
+              <span *ngIf="orderForm.get('email').invalid && orderForm.get('email').touched" class="alert-danger">
+                  Please enter a valid email!
+                </span>
+            </div>
+          </div>
+        </div>
+        <div class="title">Shipping Address</div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="shipAddress"></label>
+              <input type="text"
+                     id="shipAddress"
+                     class="form-control"
+                     name="shipAddress"
+                     placeholder="Ship Address"
+                     formControlName="shipAddress"
+                     [maxlength]="240"
+              >
+              <span *ngIf="orderForm.get('shipAddress').invalid && orderForm.get('shipAddress').touched">
+                    <span *ngIf="orderForm.get('shipAddress').errors['required']" class="alert-danger">This field is required!</span>
+                  </span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="shipAddress2"></label>
+              <input type="text"
+                     id="shipAddress2"
+                     class="form-control"
+                     name="shipAddress2"
+                     placeholder="Ship Address 2"
+                     formControlName="shipAddress2"
+                     [maxlength]="240"
+              >
+              <span *ngIf="orderForm.get('shipAddress').invalid && orderForm.get('shipAddress').touched">
+                    <span *ngIf="orderForm.get('shipAddress').errors['required']" class="alert-danger">This field is required!</span>
+                  </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="city"></label>
+              <input type="text"
+                     id="city"
+                     class="form-control"
+                     name="city"
+                     placeholder="City"
+                     formControlName="city"
+                     [maxlength]="240"
+              >
+              <span *ngIf="orderForm.get('city').invalid && orderForm.get('city').touched">
+                    <span *ngIf="orderForm.get('city').errors['required']"
+                          class="alert-danger">This field is required!</span>
+                  </span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="state"></label>
+              <input type="text"
+                     id="state"
+                     class="form-control"
+                     name="state"
+                     placeholder="State"
+                     formControlName="state"
+                     [maxlength]="240"
+              >
+              <span *ngIf="orderForm.get('state').invalid && orderForm.get('state').touched">
+                    <span class="alert-danger">Please enter a valid state</span>
+                  </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="zip"></label>
+              <input type="number"
+                     id="zip"
+                     class="form-control"
+                     name="zip"
+                     placeholder="Zip"
+                     formControlName="zip"
+                     [maxlength]="6"
+                     [minlength]="5"
+
+              >
+              <span *ngIf="orderForm.get('zip').invalid && orderForm.get('zip').touched" class="alert-danger">
+                  Please enter a valid zip number!
+                </span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="country"></label>
+              <input type="text"
+                     id="country"
+                     class="form-control"
+                     name="country"
+                     placeholder="Country"
+                     formControlName="country"
+                     [maxlength]="240"
+              >
+              <span *ngIf="orderForm.get('country').invalid && orderForm.get('country').touched">
+                    <span *ngIf="orderForm.get('country').errors['required']" class="alert-danger">This field is required!</span>
+                  </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="phone"></label>
+              <input type="text"
+                     id="phone"
+                     class="form-control"
+                     name="phone"
+                     placeholder="Phone"
+                     formControlName="phone"
+                     [maxlength]="20"
+              >
+              <span *ngIf="orderForm.get('phone').invalid && orderForm.get('phone').touched" class="alert-danger">
+                  Please enter a valid phone number!
+                </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="cargoFirm"></label>
+              <select name="cargoFirm" id="cargoFirm" class="form-control" [formControlName]="'cargoFirm'">
+                <option value="ups">UPS Cargo</option>
+                <option value="amazon">Amazon Prime</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <input id="same" type="checkbox" checked disabled>
+            <label for="same">Is your billing address same as your shipping address?</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8"></div>
+          <div class="col-md-4 mr-auto">
+            <button class="btn btn-info" style="width: 100%" type="submit"
+                    [disabled]="orderForm.invalid || orderForm.pending">
+              Continue with Payment
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

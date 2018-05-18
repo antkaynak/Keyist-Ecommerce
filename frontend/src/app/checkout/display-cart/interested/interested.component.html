@@ -1,0 +1,26 @@
+<div>
+  <div class="row">
+    <div class="col-md-12" style="text-align: center">
+      <h3>You might be interested</h3>
+    </div>
+  </div>
+  <div class="row pt-4">
+    <div *ngFor="let e of (showcaseState | async).errors">
+      <div *ngIf="e.errorEffect == 'FETCH_INTERESTED'" class=" col-md-12 alert-warning">
+        <div *ngIf="e.error.status === 400 || e.error.status === 401 ">Problem loading products...</div>
+        <div *ngIf="e.error.status === 500 || e.error.status === 0 ">Internal server error! Please contact our support
+          team.
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-12" *ngFor="let interested of (showcaseState | async).interested"
+         style="text-align: center">
+      <a routerLink="/detail/{{interested.id}}">
+        <img src="{{interested.thumb}}" class="p-2" style="height: 200px; width: 200px; display: inline-block">
+        <p> {{interested.name }} $ {{interested.price}}</p>
+      </a>
+    </div>
+  </div>
+</div>
+
+

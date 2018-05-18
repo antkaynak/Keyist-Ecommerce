@@ -1,0 +1,140 @@
+<div class="container-fluid" style="width: 70%; min-height: 50vh">
+  <div class="cart-section">
+    <div class="row mt-5" *ngIf="(cartState | async).cart.cartItemList.length > 0 ;else emptyCart">
+      <div class="col-md-7">
+        <div>
+          <div class="title">
+            Shopping Cart
+          </div>
+          <div *ngFor="let e of (cartState | async).errors">
+            <div *ngIf="e.errorEffect == 'REMOVE_FROM_CART'" class="alert-warning p-2">
+              <div *ngIf="e.error.status === 400 || e.error.status === 401">Could not remove item.</div>
+              <div *ngIf="e.error.status === 500 || e.error.status === 0">Internal server error! Please contact our
+                support team.
+              </div>
+            </div>
+          </div>
+          <div class="row item" *ngFor="let cartItem of (cartState | async).cart.cartItemList">
+            <div class="col-md-1 buttons">
+              <div *ngIf="(cartState | async).loading" class="loader" style="font-size: 6px; top:25%"></div>
+              <span *ngIf="(cartState | async).loading == false" class="delete-btn"
+                    (click)="removeFromCart(cartItem.id)"></span>
+            </div>
+            <div class="col-md-3 image">
+              <img src="{{cartItem.cartProduct.thumb}}" alt="" (click)="goToItem(cartItem.cartProduct.id)"/>
+            </div>
+
+            <div class="col-md-3 description">
+            <span style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; cursor: pointer"
+                  (click)="goToItem(cartItem.cartProduct.id)">
+             {{cartItem.cartProduct.name}}
+            </span>
+              <span>{{cartItem.cartProduct.productCategory.name}}</span>
+            </div>
+
+            <div class="col-md-3 quantity">
+              <button class="plus-btn" type="button" name="button">
+                +
+              </button>
+              <input type="text" name="name" min="1" value="{{cartItem.amount}}">
+              <button class="minus-btn" type="button" name="button">
+                -
+              </button>
+            </div>
+
+            <div class="col-md-1 price item-price">
+              ${{cartItem.cartProduct.price}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="">
+          <div class="title">
+            Summary
+          </div>
+          <div class="item p-2 pl-4">
+            <div class="row pricing">
+              <div class="col-md-4 col-4">
+                <span>Cart</span>
+              </div>
+              <div class="col-md-8 col-8 mr-auto">
+                <p class="price p-0 m-0">${{cartPrice.toFixed(2) | number:'1.2' }}</p>
+              </div>
+            </div>
+            <div class="row pricing">
+              <div class="col-md-4 col-4">
+                <span>Cargo</span>
+              </div>
+              <div class="col-md-8 col-8 mr-auto">
+                <p class="price p-0 m-0">${{(cartState | async).cart.totalCargoPrice.toFixed(2) | number:'1.2' }}</p>
+              </div>
+            </div>
+            <div *ngIf="(cartState | async).cart.cartDiscount != null" class="row pricing">
+              <div class="col-md-4 col-4">
+                <span>Discount</span>
+              </div>
+              <div class="col-md-8 col-8 mr-auto">
+                <p class="price  p-0 m-0">{{(cartState | async).cart.cartDiscount.discountPercent}}%</p>
+              </div>
+            </div>
+            <div class="row pricing">
+              <div class="col-md-4 col-4">
+                <span>Total</span>
+              </div>
+              <div class="col-md-8 col-8 mr-auto">
+                <p class="price p-0 m-0" style="font-weight: bold">${{(cartState | async).cart.totalPrice.toFixed(2) |
+                  number:'1.2' }}</p>
+              </div>
+            </div>
+          </div>
+          <div class=" p-2 pl-4">
+            <div class="row p-2 mt-3">
+              <div class="col-md-6 col-6">
+                <div *ngIf="(cartState | async).cart.cartDiscount == null; else discountCodeBlock" class="input-group">
+                  <div *ngFor="let e of (cartState | async).errors">
+                    <div *ngIf="e.errorEffect == 'APPLY_DISCOUNT'" class="alert-warning p-2">
+                      <div *ngIf="e.error.status === 409">Discount code is not found.</div>
+                      <div *ngIf="e.error.status === 400 || e.error.status === 401">Bad request.</div>
+                      <div *ngIf="e.error.status === 500 || e.error.status === 0">Internal server error! Please contact
+                        our support team.
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="(cartState | async).loading" class="loader"></div>
+
+                  <button class="btn btn-dark apply-code" [hidden]="applyCodeShow" (click)="applyCodeShow = true">
+                    Discount code
+                  </button>
+                  <div *ngIf="applyCodeShow && !(cartState | async).loading">
+                    <button class="btn btn-info apply-code" (click)="applyCode(discountCodeField)">Send</button>
+                    <input class="form-control" #discountCodeField type="text" placeholder="Discount Code">
+                  </div>
+                </div>
+                <ng-template #discountCodeBlock>
+                  <p class="p-0 m-0" style="font-weight: 300; color: #43484D;">Applied Discount Code : {{(cartState |
+                    async).cart.cartDiscount.code}}</p>
+                </ng-template>
+              </div>
+
+              <div class="col-md-6 col-6 mr-auto">
+                <button class="btn btn-info" style="width: 90%" (click)="activatePurchase()">CHECKOUT</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #emptyCart>
+  <div *ngIf="(cartState | async).fetchLoading" class="loader"></div>
+  <div *ngIf="(cartState | async).fetchLoading == false">
+    <app-empty-cart></app-empty-cart>
+  </div>
+</ng-template>
+<div class="container">
+  <div>
+    <app-interested></app-interested>
+  </div>
+</div>

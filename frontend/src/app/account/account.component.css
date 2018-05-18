@@ -1,0 +1,20 @@
+
+.title {
+  border-bottom: 1px solid #E1E8EE;
+  color: #5E6977;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.title a {
+  text-decoration: none;
+  width: 100%;
+  color: #5E6977;
+}
+
+.active {
+  background-color: #5E6977;
+  color: white !important;
+}
+
+

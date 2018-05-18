@@ -1,0 +1,171 @@
+.title {
+  height: 60px;
+  border-bottom: 1px solid #E1E8EE;
+  padding: 20px 30px;
+  color: #5E6977;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.item {
+  padding: 20px 30px;
+  height: 120px;
+  border-bottom: 1px solid #E1E8EE;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.buttons {
+  position: relative;
+  padding-top: 30px;
+}
+
+.delete-btn {
+  display: inline-block;
+  cursor: pointer;
+  width: 18px;
+  height: 17px;
+  background: url("../../../assets/delete-icn.svg") no-repeat center;
+  margin-right: 5px;
+}
+
+.is-active {
+  animation-name: animate;
+  animation-duration: .8s;
+  animation-iteration-count: 1;
+  animation-timing-function: steps(28);
+  animation-fill-mode: forwards;
+}
+
+@keyframes animate {
+  0% {
+    background-position: left;
+  }
+  50% {
+    background-position: right;
+  }
+  100% {
+    background-position: right;
+  }
+}
+
+.image {
+  margin-top: -10px;
+  padding: 0;
+}
+
+.image img {
+  width: 100px;
+  height: 100px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.description {
+  padding-top: 10px;
+}
+
+.description span {
+  display: block;
+  font-size: 14px;
+  color: #43484D;
+  font-weight: 400;
+}
+
+.description span:last-child {
+  font-weight: 300;
+  margin-top: 8px;
+  color: #86939E;
+}
+
+.quantity {
+  padding-top: 20px;
+}
+
+.quantity input {
+  -webkit-appearance: none;
+  border: none;
+  text-align: center;
+  width: 32px;
+  font-size: 16px;
+  color: #43484D;
+  font-weight: 300;
+}
+
+button.minus-btn, button.plus-btn {
+  width: 30px;
+  height: 30px;
+  background-color: #E1E8EE;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.minus-btn img {
+  margin-bottom: 3px;
+}
+
+.plus-btn img {
+  margin-top: 2px;
+}
+
+button:focus,
+input:focus {
+  outline: 0;
+}
+
+.item-price {
+  padding-top: 22px;
+  width: 83px;
+}
+
+.price {
+  text-align: center;
+  font-size: 16px;
+  color: #43484D;
+  font-weight: 300;
+}
+
+.pricing span {
+  font-size: 18px;
+  color: #43484D;
+  font-weight: 500;
+}
+
+.apply-code {
+  width: 100%;
+}
+
+@media (max-width: 800px) {
+  .container-fluid {
+    width: 95% !important;
+  }
+
+  .shopping-cart {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+  }
+
+  .item {
+    height: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .image img {
+    width: 50%;
+  }
+
+  .image,
+  .quantity,
+  .description {
+    width: 100%;
+    text-align: center;
+    margin: 6px 0;
+  }
+
+  .buttons {
+    margin-right: 20px;
+  }
+}

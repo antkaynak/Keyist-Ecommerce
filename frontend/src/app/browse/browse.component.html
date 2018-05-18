@@ -1,0 +1,55 @@
+<div class="container mt-5">
+  <form [formGroup]="browseOptionsForm" (ngSubmit)="onSubmitted()">
+    <div class="row">
+      <div class="col-md-4">
+        <select class="form-control" name="sortBy" id="sortBy" [formControlName]="'sortBy'" (change)="onSubmitted()">
+          <option *ngFor="let s of sortBy" [ngValue]="s.value">{{s.display}}</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <div *ngFor="let e of (browseState | async).errors">
+          <div *ngIf="e.errorEffect == 'FETCH_CATEGORY'" class="alert-warning">
+            <div *ngIf="e.error.status === 400 || e.error.status === 401">Problem loading categories...</div>
+            <div *ngIf="e.error.status === 500 || e.error.status === 0 ">Internal server error! Please contact our
+              support team.
+            </div>
+          </div>
+        </div>
+        <select class="form-control" name="category" id="category" [formControlName]="'category'"
+                (change)="onSubmitted()">
+          <option value="any">Any</option>
+          <option *ngFor="let c of (browseState | async).categories" [ngValue]="c.name">{{c.name}}</option>
+        </select>
+      </div>
+    </div>
+  </form>
+  <div *ngIf="(browseState | async).loading" class="loader"></div>
+  <!--<div *ngIf="(browseState | async).loading" style="min-height: 50vh"></div>-->
+  <div *ngFor="let e of (browseState | async).errors">
+    <div *ngIf="e.errorEffect == 'FETCH_PRODUCTS' || e.errorEffect == 'FETCH_PRODUCTS_APPEND'"
+         class="alert-warning col-md-12">
+      <div *ngIf="e.error.status === 400 || e.error.status === 401 ">Problem loading products...</div>
+      <div *ngIf="e.error.status === 500 || e.error.status === 0 ">Internal server error! Please contact our support
+        team.
+      </div>
+    </div>
+  </div>
+  <div class="p-2 pt-4">
+    <div class="row">
+      <div class="col-lg-3 col-md-6 col-12 pt-2 pb-2" *ngFor="let product of ( browseState | async ).products">
+        <div style="text-align: center">
+          <a routerLink="/detail/{{product.id}}">
+            <img src="{{product.thumb}}" style="height: 250px; width: 250px"
+                 [ngClass]="{'gray': (browseState | async).loading}">
+            <p>{{product.name}} ${{product.price}}</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!canFetch" class="row">
+    <div class="col-md-12 col-12">
+      <h1>End of products</h1>
+    </div>
+  </div>
+</div>

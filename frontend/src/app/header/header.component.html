@@ -1,0 +1,119 @@
+<div class="fixed-top" style="background-color: white">
+  <div style="background-color: white">
+    <div class="navbar navbar-expand-lg navbar-light m-auto p-0" style="width: 95%">
+      <div class="navbar-nav navbar-item announcement">
+        <p class="p-0 m-0">20% Off cart with WLCM_2018 coupon!</p>
+      </div>
+      <ul class="navbar-nav ml-auto sp" style="display: inline-block">
+        <li class="nav-item " style="display: inline-block">
+          <a class="nav-link" href="https://www.instagram.com/antkaynak/" target="_blank"><i class="fa fa-instagram"
+                                                                                             aria-hidden="true"></i></a>
+        </li>
+        <li class="nav-item " style="display: inline-block">
+          <a class="nav-link" href="https://www.linkedin.com/in/ant-kaynak/" target="_blank"><i class="fa fa-linkedin"
+                                                                                                aria-hidden="true"></i></a>
+        </li>
+        <li class="nav-item " style="display: inline-block">
+          <a class="nav-link" href="https://github.com/antkaynak" target="_blank"><i class="fa fa-github"
+                                                                                     aria-hidden="true"></i></a>
+        </li>
+        <li class="nav-item " style="display: inline-block">
+          <p class="p-0 m-0 announcement-hidden">20% Off cart with WLCM_2018 coupon!</p>
+        </li>
+        <li class="nav-item " style="float: right">
+          <div *ngIf="(authState | async).authenticated == true">
+            <div ngbDropdown style="cursor: pointer">
+              <a class="nav-link" id="dropdownAccount" ngbDropdownToggle>
+                <i class="fa fa-user"></i>
+              </a>
+              <div ngbDropdownMenu aria-labelledby="dropdownAccount" style="position: absolute;">
+                <ul>
+                  <li><a class="nav-link" routerLink="/account/dashboard">Dashboard</a></li>
+                  <li><a class="nav-link" routerLink="/account/orders">My Orders</a></li>
+                  <li><a class="nav-link" routerLink="/account/details">Account Settings</a></li>
+                  <li><a class="nav-link" (click)="userSignOut()">Logout <i class="fa fa-sign-out"></i></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="p-0 m-0">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white m-auto" style="width: 95%">
+    <a class="navbar-brand" style="font-size: 2em; font-weight: bold" routerLink="/">Keyist</a>
+    <a *ngIf="(authState | async).authenticated == false"
+       class="nav-link login-register" style="color: rgba(0,0,0,.5)" routerLink="/login">Login / Register</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            (click)="isCollapsed = !isCollapsed"
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse text-center" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="/browse">Browse</a>
+        </li>
+      </ul>
+      <div class="form-inline my-2 my-lg-0">
+        <input #search class="form-control ml-auto" style="width: auto" type="search" placeholder="Search"
+               (keyup.enter)="searchProduct(search)" aria-label="Search">
+        <i class="fa fa-search mr-auto" style="position: relative; left: -25px"></i>
+      </div>
+    </div>
+
+    <div class="cart" *ngIf="(authState | async).authenticated">
+      <div *ngFor="let e of (cartState | async).errors">
+        <div *ngIf="e.errorEffect == 'FETCH_CART'">
+          <div class="alert-danger">Error</div>
+        </div>
+      </div>
+
+      <div *ngIf="(cartState | async).fetchLoading" class="loader" style="font-size: 6px; position: relative"></div>
+      <div *ngIf="!(cartState | async).fetchLoading" ngbDropdown>
+
+        <div id="dropdownCart" ngbDropdownToggle style="cursor: pointer">
+          <i class="fa fa-shopping-cart" style="font-size: 1.25em; display: inline-block"></i>
+          <div
+            style="border-radius: 50%; padding: 0 5px; font-size: 12px; vertical-align: top; display: inline-block; background-color: #17a2b8; color: white">
+            {{cartItemCount}}
+          </div>
+
+        </div>
+
+        <div ngbDropdownMenu aria-labelledby="dropdownCart" class="mt-2 cart-inside">
+          <div class="list-group">
+            <a routerLink="/checkout" class="btn btn-info">Go to Cart</a>
+
+            <a *ngFor="let cartItem of(cartState | async).cart.cartItemList"
+               routerLink="/detail/{{cartItem.cartProduct.id}}" class="row pt-4 pb-4"
+               style="border-bottom: 1px solid #E1E8EE ">
+              <div class="col-md-4 col-5">
+                <img [src]="cartItem.cartProduct.thumb" style="width: 100px; height: 60px; padding-left: 30px">
+              </div>
+              <div class="col-md-7 col-6 ml-auto">
+                <p class="p-0 m-0" style="color: #5E6977">{{cartItem.cartProduct.name}}</p>
+                <p class="p-0 m-0" style="color: #5E6977">{{cartItem.amount}} x ${{cartItem.cartProduct.price}}</p>
+              </div>
+            </a>
+
+            <p class="p-0 m-0 text-center">Total ${{(cartState | async).cart.totalPrice | number:'1.2'}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <hr class="p-0 m-0">
+  <div *ngIf="(authState | async).authenticated && (authState | async).isActive == false" class="alert-warning"
+       style="text-align: center">
+    Welcome to Keyist! Your account is inactive. Please check your mail and activate! <a
+    style="color: inherit; font-weight: 500" routerLink="/account/dashboard">Send a request again</a>
+    <hr class="p-0 m-0">
+  </div>
+</div>

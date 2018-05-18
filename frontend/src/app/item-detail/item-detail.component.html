@@ -1,0 +1,109 @@
+<div class="container">
+  <div *ngIf="fetchError != null">
+    <div class="alert-warning">Problem loading products...</div>
+  </div>
+  <div *ngIf="inlineLoading" class="loader"></div>
+  <div *ngIf="inlineLoading" style="min-height: 50vh"></div>
+  <div *ngIf="product != null && inlineLoading == false" class="row pt-5">
+    <div class="col-md-7">
+      <div class="left-column">
+        <img class="img-responsive" style="width: 95%" src="{{ product.image }}" alt="{{ product.name  }}">
+      </div>
+    </div>
+    <div class="col-md-4 mr-auto">
+      <!-- Right Column -->
+      <div class="right-column">
+
+        <!-- Product Description -->
+        <div class="product-description">
+          <span>{{ product.productCategory.name }}</span>
+          <h1>{{ product.name}}</h1>
+          <p> {{ product.longDesc }}</p>
+        </div>
+
+        <!-- Product Configuration -->
+        <div class="product-configuration">
+
+          <!-- Product Color -->
+          <div class="product-color">
+            <span>Color</span>
+
+            <div class="color-choose">
+              <div>
+                <input data-image="red" type="radio" id="red" name="color" value="red" checked>
+                <label for="red"><span></span></label>
+              </div>
+              <div>
+                <input data-image="blue" type="radio" id="blue" name="color" value="blue">
+                <label for="blue"><span></span></label>
+              </div>
+              <div>
+                <input data-image="black" type="radio" id="black" name="color" value="black">
+                <label for="black"><span></span></label>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Cable Configuration -->
+          <div class="cable-config">
+            <span>Amount</span>
+
+            <div class="cable-choose">
+              <input #amount type="number" placeholder="Amount" min="1" value="1">
+            </div>
+            <a (click)="open(faq)">How to contact support?</a>
+          </div>
+        </div>
+
+        <!-- Product Pricing -->
+        <div class="product-price">
+
+          <div class="row" *ngFor="let e of (cartState | async).errors">
+            <div *ngIf="e.errorEffect == 'ADD_TO_CART'" class="alert-warning">
+              <div class="col-md-12">
+                <div *ngIf="e.error.status === 400 || e.error.status === 401">Could not add item.</div>
+                <div *ngIf="e.error.status === 409">Please select a proper amount</div>
+                <div *ngIf="e.error.status === 500 || e.error.status === 0">Internal server error. Please contact our
+                  support team.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <span>${{ product.price }}</span>
+            </div>
+            <div class="col-md-8">
+              <div *ngIf="(cartState | async).loading" class="loader" style="top:0; left: 25%"></div>
+              <button (click)="addToCart(amount)" [disabled]="(cartState | async).loading"
+                      [style.display]="(cartState | async).loading ? 'none' : 'inline-block'" class="btn btn-info"
+                      style="font-size: 20px;">Add to cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #faq let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Support</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>There is no active support as this is a demo site.</p>
+      <p>Please visit FAQ</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-info" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+
+  <div class="row mt-5">
+    <app-related></app-related>
+  </div>
+</div>

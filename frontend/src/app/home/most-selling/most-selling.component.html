@@ -1,0 +1,27 @@
+<div class="most-selling mt-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12" style="text-align: center">
+        <h1>Most Selling</h1>
+      </div>
+    </div>
+    <div class="row pt-4">
+      <div *ngFor="let e of (showcaseState | async).errors">
+        <div *ngIf="e.errorEffect == 'FETCH_MOST_SELLING'" class=" col-md-12 alert-warning">
+          <div *ngIf="e.error.status === 400 || e.error.status === 401 ">Problem loading products...</div>
+          <div *ngIf="e.error.status === 500 || e.error.status === 0 ">Internal server error! Please contact our support
+            team.
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-12 p-3" *ngFor="let mostSellingAr of (showcaseState | async).mostSelling"
+           style="text-align: center">
+        <a routerLink="/detail/{{mostSellingAr.id}}">
+          <img src="{{mostSellingAr.thumb}}" class="p-2" style="height: 250px; width: 250px; display: inline-block">
+          <p> {{mostSellingAr.name }} $ {{mostSellingAr.price}}</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,13 @@
+.container {
+
+}
+
+.back {
+  background-color: #292c2f;
+  min-height: 60vh;
+  margin-bottom: -70px;
+}
+
+h1, h3 {
+  color: white;
+}

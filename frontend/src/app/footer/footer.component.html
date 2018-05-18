@@ -1,0 +1,60 @@
+<footer class="footer-distributed">
+
+  <div class="footer-left">
+
+    <h3>Keyist<span> demo </span></h3>
+
+    <p class="footer-links">
+      <a routerLink="/">Home</a>
+
+      <a routerLink="/browse">Browse</a>
+
+      <a *ngIf=" (authState | async).authenticated == true " routerLink="/account/dashboard">Account</a>
+
+      <a *ngIf=" (authState | async).authenticated == false" routerLink="/login">Login / Signup</a>
+
+      <a routerLink="/faq">FAQ</a>
+    </p>
+
+    <p class="footer-company-name">Ant Kaynak &copy; 2018</p>
+  </div>
+
+  <div class="footer-center">
+
+    <div>
+      <i class="fa fa-map-marker"></i>
+      <p><span>Ankara</span> Turkey</p>
+    </div>
+
+    <div>
+      <i class="fa fa-user"></i>
+      <p>Ant Kaynak</p>
+    </div>
+
+    <div>
+      <i class="fa fa-envelope"></i>
+      <p><a href="mailto:antkaynak1@gmail.com">antkaynak1@gmail.com</a></p>
+    </div>
+
+  </div>
+
+  <div class="footer-right">
+
+    <p class="footer-company-about">
+      <span>About me</span>
+      I am a passionate computer science student from Turkey. I am interested
+      in open source projects and high-level programming in Cloud Computing,
+      Distributed Systems and Machine Learning.
+    </p>
+
+    <div class="footer-icons">
+
+      <a href="https://www.instagram.com/antkaynak/" target="_blank"><i class="fa fa-instagram"></i></a>
+      <a href="https://www.linkedin.com/in/ant-kaynak/" target="_blank"><i class="fa fa-linkedin"></i></a>
+      <a href="https://github.com/antkaynak" target="_blank"><i class="fa fa-github"></i></a>
+
+    </div>
+
+  </div>
+
+</footer>

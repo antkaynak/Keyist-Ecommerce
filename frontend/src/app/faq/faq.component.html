@@ -1,0 +1,28 @@
+<div class="container p-5">
+  <div class="title">FAQ</div>
+  <div class="accordion pt-4">
+    <ngb-accordion #acc="ngbAccordion" [closeOthers]="true" activeIds="static-1">
+      <ngb-panel id="static-1">
+        <ng-template ngbPanelTitle>
+          <span class="panel-title">Is this site a demo?</span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          Yes, this site is a running showcase of a popular stack Angular and Spring Boot. The transactions
+          are not real and no way in shape can be proven for real. This site may have security flaws and not proven
+          to be secured. Please do not enter your real information for your security's sake. Keyist team is not
+          responsible for your information in any way possible.
+        </ng-template>
+      </ngb-panel>
+      <ngb-panel id="static-2">
+        <ng-template ngbPanelTitle>
+          <span class="panel-title w-100">How can I contact you?</span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          Source code can be found in <a href="https://github.com/Exercon">my github page.</a>
+          If you want to contact me you can mail me at antkaynak1@gmail.com
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+  </div>
+</div>
+

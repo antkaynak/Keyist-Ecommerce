@@ -1,0 +1,11 @@
+a {
+  color: #17a2b8;
+  text-decoration: none;
+}
+
+p {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+

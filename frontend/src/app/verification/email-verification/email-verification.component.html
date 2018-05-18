@@ -1,0 +1,27 @@
+<div class="container p-2 mt-5">
+  <div class="p-5">
+    <div *ngIf="isVerified == true">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="title">Success!</div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-12"><span>Your account is activated. </span>
+          <div *ngIf="isLoggedIn== false">Please <a routerLink="/login">login.</a></div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isVerified == false">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="title">Error</div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-12"><span>Cannot activate at the moment. Please contact our support team .</span></div>
+      </div>
+    </div>
+    <p *ngIf="isVerified == null">Sending request...</p>
+  </div>
+</div>

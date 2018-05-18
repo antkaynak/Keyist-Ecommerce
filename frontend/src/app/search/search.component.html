@@ -1,0 +1,30 @@
+<div class="container">
+
+  <div class="mb20">
+    <h1>Search Results</h1>
+    <h2 class="lead"><strong class="text-info">{{products.length}}</strong> results were found for the search for
+      <strong class="text-info">{{keyword}}</strong></h2>
+    <h2 *ngIf="canFetch" class="lead">Scroll to load more.</h2>
+  </div>
+
+  <section class="col-12 col-sm-6 col-md-12">
+    <article *ngFor="let product of products" class="search-result row">
+      <div class="col-col-12 col-sm-12 col-md-3">
+        <a routerLink="/detail/{{product.id}}" class="thumbnail"><img style="width: 100%;" src="{{product.thumb}}"
+                                                                      alt="{{product.name}}"/></a>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-7 excerpet">
+        <h3><a routerLink="/detail/{{product.id}}">{{product.name}}</a></h3>
+        <p>{{product.productCategory.name}}</p>
+      </div>
+      <span class="clearfix borda"></span>
+    </article>
+  </section>
+
+  <div *ngIf="!canFetch" class="row">
+    <div class="col-12 col-md-12">
+      <h1>End of products</h1>
+    </div>
+  </div>
+</div>

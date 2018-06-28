@@ -45,9 +45,10 @@ Compatible IDE, Intellij IDEA recommended for this project.
 
 ### Installing
 
-The codes are split into 3 sections.
-frontend - Angular 5
-resource_server - Spring Boot Backend
+The codes are split into 3 sections. 
+
+frontend - Angular 5 ,
+resource_server - Spring Boot Backend ,
 authorization_server - A Spring Boot OAuth2 Authorization server.
 
 

@@ -34,7 +34,7 @@ public class PublicUserController extends ApiController {
     }
 
     @RequestMapping(value = "/account/registration", method = RequestMethod.POST)
-    public ResponseEntity registerUserAccount(@RequestBody UserDTO userDTO, BindingResult bindingResult, HttpServletRequest request) {
+    public ResponseEntity registerUserAccount(@RequestBody @Valid UserDTO userDTO, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }

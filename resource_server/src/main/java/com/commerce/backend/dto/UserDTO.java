@@ -24,6 +24,7 @@ public class UserDTO {
 
     @NotNull
     @NotEmpty
+    @Size(min = 6)
     private String password;
 
     @NotNull

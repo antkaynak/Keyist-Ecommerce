@@ -48,8 +48,13 @@ Compatible IDE, Intellij IDEA recommended for this project.
 The codes are split into 3 sections. 
 
 frontend - Angular 5 ,
+
 resource_server - Spring Boot Backend ,
+
 authorization_server - A Spring Boot OAuth2 Authorization server.
+
+
+To run the application fill the lines in resource server and authorization server application.properties as well as frontend application service urls.
 
 
 For MySQL Database 

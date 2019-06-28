@@ -105,6 +105,7 @@ Keep in mind that both authorization and backend server's pom.xml is configured 
 * Shipping status only supports packaging and shipped ( 0-1 )
 * The cargo firm options are hard coded in the frontend and backend does not check the selected cargo firm option.
 * Some minor display bugs on mobile.
+* The search function is case sensitive. It shouldn't be.
 
 ## Contributing
 

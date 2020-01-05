@@ -1,12 +1,13 @@
-package com.commerce.oauth.server;
+package com.commerce.oauth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ServerApplication {
+public class OauthApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ServerApplication.class, args);
+        SpringApplication.run(OauthApplication.class, args);
     }
+
 }

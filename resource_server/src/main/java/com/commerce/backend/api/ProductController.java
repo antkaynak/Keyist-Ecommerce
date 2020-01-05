@@ -127,11 +127,11 @@ public class ProductController extends ApiController {
     private Sort getSort(String sort) {
         switch (sort) {
             case "lowest":
-                return new Sort(Sort.Direction.ASC, "price");
+                return Sort.by(Sort.Direction.ASC, "price");
             case "highest":
-                return new Sort(Sort.Direction.DESC, "price");
+                return Sort.by(Sort.Direction.DESC, "price");
             case "name":
-                return new Sort(Sort.Direction.ASC, "name");
+                return Sort.by(Sort.Direction.ASC, "name");
             default:
                 return null;
         }

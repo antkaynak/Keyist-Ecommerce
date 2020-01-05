@@ -16,6 +16,9 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import javax.sql.DataSource;
 
+//TODO migrate Spring Security OAuth 2.x to Spring Security 5.2.x since the first is deprecated
+//TODO https://github.com/spring-projects/spring-security/wiki/OAuth-2.0-Migration-Guide
+
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {

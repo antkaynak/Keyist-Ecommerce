@@ -80,7 +80,7 @@ public class ProductDisplayServiceImpl implements ProductDisplayService {
             throw new IllegalArgumentException("Page and size parameters are required");
         }
         PageRequest pageRequest = PageRequest.of(page, size);
-        return productDisplayRepository.findAllByNameContaining(keyword, pageRequest);
+        return productDisplayRepository.findAllByNameContainingIgnoreCase(keyword, pageRequest);
     }
 
 

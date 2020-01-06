@@ -3,7 +3,7 @@ import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from "
 import {Store} from "@ngrx/store";
 import * as fromApp from "../store/app.reducers";
 import * as fromAuth from "../store/auth/auth.reducer";
-import 'rxjs/add/operator/take';
+import {map} from "rxjs/operators";
 
 @Injectable()
 export class NonAuthGuardService implements CanActivate {
@@ -13,11 +13,11 @@ export class NonAuthGuardService implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.store.select('auth')
-      .map((authState: fromAuth.State) => {
+      .pipe(map((authState: fromAuth.State) => {
         if (authState.authenticated) {
           this.router.navigate(["/"]);
         }
         return !authState.authenticated;
-      });
+      }));
   }
 }

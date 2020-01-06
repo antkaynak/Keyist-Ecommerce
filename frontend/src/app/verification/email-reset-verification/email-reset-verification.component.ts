@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {AccountService} from "../../services/account.service";
-import {Observable} from "rxjs/Observable";
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/catch';
+import {throwError} from "rxjs";
 import {Store} from "@ngrx/store";
 import * as fromApp from "../../store/app.reducers";
+import {catchError, take} from "rxjs/operators";
 
 @Component({
   selector: 'app-email-verification',
@@ -21,19 +20,14 @@ export class EmailResetVerificationComponent implements OnInit {
 
   ngOnInit() {
     const emailResetToken = this.route.snapshot.queryParams["token"];
-    this.accountService.resetEmailConfirm(emailResetToken).take(1).catch(error => {
+    this.accountService.resetEmailConfirm(emailResetToken).pipe(take(1), catchError(error => {
       this.isVerified = false;
-      return Observable.throw(error);
-    }).subscribe((data) => {
+      return throwError(error);
+    })).subscribe((data) => {
       this.isVerified = true;
-      this.store.select('auth').take(1).subscribe(data => {
-        if (data.authenticated) {
-          this.isLoggedIn = true;
-        } else {
-          this.isLoggedIn = false;
-        }
+      this.store.select('auth').pipe(take(1)).subscribe(data => {
+        this.isLoggedIn = data.authenticated;
       });
     });
   }
-
 }

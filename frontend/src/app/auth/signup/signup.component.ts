@@ -4,7 +4,7 @@ import * as AuthActions from "../../store/auth/auth.actions";
 import {Store} from "@ngrx/store";
 import * as fromApp from "../../store/app.reducers";
 import {HttpError} from "../../store/app.reducers";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import * as PasswordValidators from "../../services/validators/password.validator";
 
 @Component({
@@ -37,12 +37,11 @@ export class SignupComponent implements OnInit {
 
 
   onSubmitted() {
-    console.log(this.signUpForm);
     this.store.dispatch(new AuthActions.SignUp(
       {
         email: this.signUpForm.value.email,
         password: this.signUpForm.value.passwordGroup.newPassword,
-        passwordRepeat: this.signUpForm.value.passwordGroup.newpasswordConfirm
+        passwordRepeat: this.signUpForm.value.passwordGroup.newPasswordConfirm
       }));
   }
 

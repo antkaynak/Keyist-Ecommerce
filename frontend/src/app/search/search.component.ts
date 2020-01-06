@@ -1,11 +1,9 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {ProductService} from "../services/product.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {Subscription} from "rxjs/Subscription";
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/catch';
+import {Subscription, throwError} from "rxjs";
 import {ProductDisplay} from "../store/cart/cart.reducer";
-import {Observable} from "rxjs/Observable";
+import {catchError, take} from "rxjs/operators";
 
 @Component({
   selector: 'app-search',
@@ -28,11 +26,12 @@ export class SearchComponent implements OnInit {
     this.querySubscribe = this.route.params.subscribe((params: Params) => {
       this.keyword = params['keyword'];
       this.productService.searchProduct(this.page, this.keyword)
-        .take(1)
-        .catch(error => {
-          this.canFetch = false;
-          return Observable.throw(error);
-        })
+        .pipe(take(1), catchError(
+          error => {
+            this.canFetch = false;
+            return throwError(error);
+          }
+        ))
         .subscribe(data => {
           this.products = data;
           this.page++;
@@ -49,11 +48,12 @@ export class SearchComponent implements OnInit {
       console.log(this.canFetch);
       if (this.canFetch) {
         this.productService.searchProduct(this.page, this.keyword)
-          .take(1)
-          .catch(error => {
-            this.canFetch = false;
-            return Observable.throw(error);
-          })
+          .pipe(take(1), catchError(
+            error => {
+              this.canFetch = false;
+              return throwError(error);
+            }
+          ))
           .subscribe(data => {
             this.products.push(...data);
             this.page++;
@@ -64,6 +64,4 @@ export class SearchComponent implements OnInit {
       }
     }
   }
-
-
 }

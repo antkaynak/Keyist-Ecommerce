@@ -6,13 +6,12 @@ import {Store} from "@ngrx/store";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import * as BlankValidators from "../../../services/validators/blank.validator";
 import * as AuthActions from "../../../store/auth/auth.actions";
-import {Observable} from "rxjs/Observable";
-import {Subscription} from "rxjs/Subscription";
+import {Subscription, throwError} from "rxjs";
+import {catchError, take} from "rxjs/operators";
 
 @Component({
   selector: 'app-reset-details',
-  templateUrl: './reset-details.component.html',
-  styleUrls: ['./reset-details.component.css']
+  templateUrl: './reset-details.component.html'
 })
 export class ResetDetailsComponent implements OnInit, OnDestroy {
 
@@ -26,22 +25,26 @@ export class ResetDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.detailsForm = new FormGroup({
-      'firstName': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'),BlankValidators.checkIfBlankValidator]),
-      'lastName': new FormControl(null,[Validators.pattern('^[a-zA-Z\\s]+$'),BlankValidators.checkIfBlankValidator]),
-      'address': new FormControl(null, [Validators.pattern('[0-9a-zA-Z #,-]+'),BlankValidators.checkIfBlankValidator]),
-      'address2': new FormControl(null, [Validators.pattern('[0-9a-zA-Z #,-]+'),BlankValidators.checkIfBlankValidator]),
-      'city': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'),BlankValidators.checkIfBlankValidator]),
-      'state': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'),BlankValidators.checkIfBlankValidator]),
-      'zip': new FormControl(null, [ Validators.maxLength(6),Validators.minLength(5)]),
-      'country': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'),BlankValidators.checkIfBlankValidator]),
+      'firstName': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'),BlankValidators.checkIfBlankValidator, Validators.minLength(3), Validators.maxLength(26)]),
+      'lastName': new FormControl(null,[Validators.pattern('^[a-zA-Z\\s]+$'),BlankValidators.checkIfBlankValidator, Validators.minLength(3), Validators.maxLength(26)]),
+      'address': new FormControl(null, [Validators.pattern('[0-9a-zA-Z #,-]+'),BlankValidators.checkIfBlankValidator, Validators.minLength(3), Validators.maxLength(240)]),
+      'address2': new FormControl(null, [Validators.pattern('[0-9a-zA-Z #,-]+'),BlankValidators.checkIfBlankValidator, Validators.minLength(3), Validators.maxLength(240)]),
+      'city': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'),BlankValidators.checkIfBlankValidator, Validators.minLength(3), Validators.maxLength(100)]),
+      'state': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'),BlankValidators.checkIfBlankValidator, Validators.minLength(3), Validators.maxLength(40)]),
+      'zip': new FormControl(null, [ Validators.pattern('^[0-9]*$'), Validators.maxLength(6),Validators.minLength(5)]),
+      'country': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'),BlankValidators.checkIfBlankValidator, Validators.minLength(3), Validators.maxLength(40)]),
       'phone': new FormControl(null, [Validators.pattern('[0-9]+'), Validators.minLength(11), Validators.maxLength(12)]),
     });
 
 
-   this.formSubscription = this.accountService.getUser().catch(error => {
-      this.formLoading = false;
-      return Observable.throw(error);
-    }).subscribe( data => {
+   this.formSubscription = this.accountService.getUser()
+     .pipe(catchError(
+       error => {
+         this.formLoading = false;
+         return throwError(error);
+       }
+     ))
+     .subscribe( data => {
       if(data != null) {
         this.formLoading = false;
         this.formHidden = false;
@@ -57,8 +60,6 @@ export class ResetDetailsComponent implements OnInit, OnDestroy {
           phone: data.phone
         });
       }else{
-        console.log("data is null");
-        console.log(data);
         this.store.dispatch(new AuthActions.SignOut());
         this.router.navigate(["/"]);
       }
@@ -72,7 +73,6 @@ export class ResetDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSubmitDetailsForm() {
-    console.log(this.detailsForm);
     this.inlineLoading = true;
 
     const user = {
@@ -87,12 +87,16 @@ export class ResetDetailsComponent implements OnInit, OnDestroy {
       phone: this.detailsForm.value.phone,
     };
 
-    this.accountService.saveUser(user).take(1).catch(error => {
-      this.formHidden = true;
-      this.inlineLoading = false;
-      alert("An error occurred while fetching user data. Please refresh your page.");
-      return Observable.throw(error);
-    }).subscribe(data => {
+    this.accountService.saveUser(user)
+      .pipe(take(1), catchError(
+        error => {
+          this.formHidden = true;
+          this.inlineLoading = false;
+          alert("An error occurred while fetching user data. Please refresh your page.");
+          return throwError(error);
+        }
+      ))
+      .subscribe(data => {
         this.inlineLoading = false;
     });
 

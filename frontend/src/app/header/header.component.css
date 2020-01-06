@@ -1,4 +1,8 @@
 
+.top{
+  background-color: white;
+}
+
 .announcement {
   color: rgba(0, 0, 0, .5);
 }
@@ -6,6 +10,35 @@
 .announcement-hidden {
   display: none;
   color: rgba(0, 0, 0, .5);
+}
+
+.login-register{
+  color: #17a2b8;
+  font-weight: 500;
+}
+
+.search{
+  margin-right: 10px;
+}
+
+.search input{
+  width: auto;
+}
+
+.nav-item{
+  display: inline-block;
+}
+
+.nav-link{
+  padding: 6px;
+}
+
+.navbar-collapse{
+  align-content: end;
+}
+
+.cart-inside{
+  min-height: 30vh;
 }
 
 .fa-user {
@@ -17,7 +50,6 @@
   position: absolute;
   width: 400px;
   max-height: 400px;
-  left: -300px !important;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -58,18 +90,35 @@
 
 @media only screen and (max-width: 991px) {
   .cart {
-    position: absolute;
-    left: 55%;
+    flex: 5;
+    order: 3;
   }
-
+  .browse{
+    flex: 5;
+    order: 2;
+  }
+  .navbar{
+    display: flex;
+    flex-direction: row;
+  }
+  .navbar-toggler{
+    flex: 1;
+    order:4;
+  }
+  .navbar-brand{
+    flex: 5;
+    order:1;
+  }
+  .login-register{
+    flex: 5;
+    order: 3;
+  }
   .cart-inside {
     width: 220px;
-    left: -70px !important;
+    left: 90px !important; /* Override ng-bootstrap */
   }
-
-  .cart-inside-link {
-    height: 40vh;
+  .search input{
+    width: 100%;
   }
-
 }
 

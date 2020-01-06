@@ -3,12 +3,12 @@ import {AccountService} from "../../../services/account.service";
 import * as PasswordValidators from "../../../services/validators/password.validator";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import * as BlankValidators from "../../../services/validators/blank.validator";
-import {Observable} from "rxjs/Observable";
+import {throwError} from "rxjs";
+import {catchError, take} from "rxjs/operators";
 
 @Component({
   selector: 'app-reset-password',
-  templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.css']
+  templateUrl: './reset-password.component.html'
 })
 export class ResetPasswordComponent implements OnInit {
 
@@ -20,9 +20,9 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit() {
     this.resetPasswordForm = new FormGroup({
-      'oldPassword': new FormControl(null, [Validators.required, BlankValidators.checkIfBlankValidator, Validators.minLength(6)]),
+      'oldPassword': new FormControl(null, [Validators.required, BlankValidators.checkIfBlankValidator, Validators.minLength(6), Validators.maxLength(52)]),
       'newPasswordGroup': new FormGroup({
-        'newPassword': new FormControl(null, [Validators.required, BlankValidators.checkIfBlankValidator, Validators.minLength(6)]),
+        'newPassword': new FormControl(null, [Validators.required, BlankValidators.checkIfBlankValidator, Validators.minLength(6), Validators.maxLength(52)]),
         'newPasswordConfirm': new FormControl(null, [Validators.required, BlankValidators.checkIfBlankValidator, Validators.minLength(6)])
       }, PasswordValidators.passwordMatchCheckValidator),
     });
@@ -34,12 +34,13 @@ export class ResetPasswordComponent implements OnInit {
       this.resetPasswordForm.value.oldPassword,
       this.resetPasswordForm.value.newPasswordGroup.newPassword,
       this.resetPasswordForm.value.newPasswordGroup.newPasswordConfirm)
-      .take(1)
-      .catch(error => {
-        this.inlineLoading = false;
-        alert("Error resetting password. Please try again...");
-        return Observable.throw(error);
-      })
+      .pipe(take(1), catchError(
+        error => {
+          this.inlineLoading = false;
+          alert("Error resetting password. Please try again...");
+          return throwError(error);
+        }
+      ))
       .subscribe(res => {
         this.inlineLoading = false;
         alert("Success! Your password has been changed.");

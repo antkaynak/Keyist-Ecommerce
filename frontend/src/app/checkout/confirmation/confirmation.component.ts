@@ -2,12 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import * as fromApp from "../../store/app.reducers";
 import {Store} from "@ngrx/store";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {Cart} from "../../store/cart/cart.reducer";
 import {PaymentObject, PostOrdersObject} from "../../store/order/order.reducer";
 import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {BankAcceptComponent} from "./bank-accept/bank-accept.component";
-import 'rxjs/add/operator/take';
+import {take} from "rxjs/operators";
 
 @Component({
   selector: 'app-confirmation',
@@ -15,6 +15,8 @@ import 'rxjs/add/operator/take';
   styleUrls: ['./confirmation.component.css']
 })
 export class ConfirmationComponent implements OnInit {
+
+  canSubmit: boolean;
 
   cartState: Observable<{ cart: Cart }>;
   fetchedCart: Cart = null;
@@ -31,8 +33,9 @@ export class ConfirmationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.canSubmit = false;
     this.cartState = this.store.select('cart');
-    this.cartState.take(1).subscribe(data => {
+    this.cartState.pipe(take(1)).subscribe(data => {
       if (data == null || data.cart == null) {
         this.router.navigate(["/checkout"]);
       }
@@ -40,7 +43,7 @@ export class ConfirmationComponent implements OnInit {
     });
 
     this.orderState = this.store.select('order');
-    this.orderState.take(1).subscribe(data => {
+    this.orderState.pipe(take(1)).subscribe(data => {
       if (data == null || data.postPayment == null || data.postOrders == null) {
         this.router.navigate(["/checkout"]);
       } else {
@@ -63,5 +66,9 @@ export class ConfirmationComponent implements OnInit {
     modalRef.componentInstance.totalPrice = this.fetchedCart.totalPrice;
     modalRef.componentInstance.postOrdersObject = this.fetchedPostOrdersObject;
     modalRef.componentInstance.postOrdersCartObject = this.fetchedCart;
+  }
+
+  checkValue(check: boolean) {
+    this.canSubmit = check;
   }
 }

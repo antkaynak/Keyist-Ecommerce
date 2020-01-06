@@ -32,6 +32,10 @@ speed-measure-plugin*.json
 *.iws
 *.iml
 *.ipr
+.classpath
+.c9/
+*.launch
+.settings/
 
 ### NetBeans ###
 /nbproject/private/

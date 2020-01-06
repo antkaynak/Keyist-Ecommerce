@@ -15,7 +15,6 @@ export class PaymentComponent implements OnInit {
 
   paymentForm: FormGroup;
 
-
   constructor(private store: Store<fromApp.AppState>, private router: Router) {
   }
 
@@ -32,8 +31,6 @@ export class PaymentComponent implements OnInit {
   }
 
   onSubmitPaymentForm() {
-    console.log(this.paymentForm);
-    console.log(this.paymentForm.value.cardExp);
     const paymentData: PaymentObject = {
       cardOwner: this.paymentForm.value.cardOwner,
       cardNo: this.paymentForm.value.cardNo,
@@ -41,8 +38,6 @@ export class PaymentComponent implements OnInit {
       cardCCV: this.paymentForm.value.cardCCV,
     };
     this.store.dispatch(new OrderActions.PostPayment(paymentData));
-
-    console.log(paymentData);
     this.router.navigate(["/checkout/confirm"]);
   }
 }

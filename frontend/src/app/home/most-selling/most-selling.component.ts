@@ -1,11 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as fromApp from "../../store/app.reducers";
 import {Store} from "@ngrx/store";
-import {Observable} from "rxjs/Observable";
+import {Observable, Subscription} from "rxjs";
 import {ProductDisplay} from "../../store/cart/cart.reducer";
-import {Subscription} from "rxjs/Subscription";
 import * as ShowcaseActions from '../../store/showcase/showcase.actions';
-import 'rxjs/add/operator/filter';
+import {filter} from "rxjs/operators";
 
 @Component({
   selector: 'app-most-selling',
@@ -26,7 +25,7 @@ export class MostSellingComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.showcaseState = this.store.select('showcase');
     this.showcaseSubscription = this.showcaseState
-      .filter(data => data.mostSelling.length == 0 && !this.isFetched)
+      .pipe(filter(data => data.mostSelling.length == 0 && !this.isFetched))
       .subscribe(
         data => {
           this.store.dispatch(new ShowcaseActions.FetchMostSelling());

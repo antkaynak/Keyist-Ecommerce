@@ -2,16 +2,13 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AccountService} from "../../services/account.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Observable} from "rxjs/Observable";
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/filter';
+import {Subscription, throwError} from "rxjs";
 import * as BlankValidators from "../../services/validators/blank.validator";
 import * as PasswordValidators from "../../services/validators/password.validator";
 import * as fromApp from "../../store/app.reducers";
 import {Store} from "@ngrx/store";
 import * as AuthActions from '../../store/auth/auth.actions';
-import {Subscription} from "rxjs/Subscription";
+import {catchError, filter, take} from "rxjs/operators";
 
 @Component({
   selector: 'app-password-forgot-verification',
@@ -31,7 +28,7 @@ export class PasswordForgotVerificationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.authSubscription = this.store.select('auth')
-      .filter(data => data.authenticated)
+      .pipe(filter(data => data.authenticated))
       .subscribe(data => {
         this.store.dispatch(new AuthActions.SignOut());
       });
@@ -44,10 +41,11 @@ export class PasswordForgotVerificationComponent implements OnInit, OnDestroy {
 
 
     this.passwordForgotToken = this.route.snapshot.queryParams["token"];
-    this.accountService.forgotPasswordConfirm(this.passwordForgotToken).take(1).catch(error => {
+    this.accountService.forgotPasswordConfirm(this.passwordForgotToken)
+      .pipe(take(1), catchError(error => {
       this.isVerified = false;
-      return Observable.throw(error);
-    }).subscribe((data) => {
+      return throwError(error);
+    })).subscribe((data) => {
       this.isVerified = true;
     });
   }
@@ -63,16 +61,14 @@ export class PasswordForgotVerificationComponent implements OnInit, OnDestroy {
       this.passwordForgotToken,
       this.forgotPasswordResetForm.value.newPasswordGroup.newPassword,
       this.forgotPasswordResetForm.value.newPasswordGroup.newPasswordConfirm
-    ).take(1)
-      .catch(error => {
+    ).pipe(take(1),
+      catchError(error => {
         alert("An error occurred. Please try again.");
-        return Observable.throw(error);
-      })
+        return throwError(error);
+      }))
       .subscribe(res => {
         alert("Success! \nYou have changed your password. Please login.");
         this.router.navigate(["/login"]);
       });
-
   }
-
 }

@@ -47,14 +47,14 @@ import {NonAuthGuardService} from "./services/non-auth-guard.service";
     BrowseModule,
     ItemDetailModule,
     CheckoutModule,
-    // AccountModule,
+    // AccountModule, lazy loaded module not imported here
     VerificationModule,
     SearchModule,
     AuthModule,
-    // FaqModule,
+    // FaqModule, lazy loaded module not imported here
     FooterModule,
     HttpClientModule,
-    NgbModule.forRoot(),
+    NgbModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([CartEffects, OrderEffects, AuthEffects, ShowcaseEffects, BrowseEffects]),
     RouterModule.forRoot(AppRoutes, {useHash: false, preloadingStrategy: PreloadAllModules})

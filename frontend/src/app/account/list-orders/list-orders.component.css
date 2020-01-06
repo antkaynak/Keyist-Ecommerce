@@ -15,6 +15,10 @@ ngb-pagination /deep/ .page-item.active .page-link {
   border-radius: 6px;
 }
 
+.no-order{
+  color: #5E6977
+}
+
 .title {
 
   color: #5E6977;
@@ -33,6 +37,15 @@ ngb-pagination /deep/ .page-item.active .page-link {
   font-weight: 300;
   font-size: 14px;
   color: #86939E;
+}
+
+.order-border{
+  border-right: 1px solid #E1E8EE;
+}
+
+.order-list{
+  height: 300px;
+  overflow-y: scroll;
 }
 
 span {

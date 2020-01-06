@@ -158,9 +158,9 @@
         </p>
       </div>
       <div class="p-2 mt-2">
-        <input #confirm id="confirm" type="checkbox" value="confirm">
+        <input id="confirm" type="checkbox" value="confirm" (change)="checkValue(!canSubmit)">
         <label for="confirm">I have read and confirm the terms of service.</label>
-        <button class="btn btn-info" [disabled]="!confirm.checked"
+        <button class="btn btn-info" [disabled]="!canSubmit"
                 [style.display]="innerLoading ? 'none' : 'inline-block'" (click)="openPaymentModal()">PURCHASE
         </button>
       </div>

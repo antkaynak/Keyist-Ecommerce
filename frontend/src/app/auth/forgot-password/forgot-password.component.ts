@@ -1,14 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AccountService} from "../../services/account.service";
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/catch';
-import {Observable} from "rxjs/Observable";
+import {throwError} from "rxjs";
+import {catchError, take} from "rxjs/operators";
 
 @Component({
   selector: 'app-forgot-password',
-  templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.css']
+  templateUrl: './forgot-password.component.html'
 })
 export class ForgotPasswordComponent implements OnInit {
 
@@ -27,11 +25,12 @@ export class ForgotPasswordComponent implements OnInit {
   onForgotPasswordFormSubmit() {
     console.log(this.forgotPasswordForm);
     this.accountService.forgotPasswordRequest(this.forgotPasswordForm.value.email)
-      .take(1)
-      .catch(error => {
-        alert("An error occurred. Please try again.");
-        return Observable.throw(error);
-      })
+      .pipe(take(1), catchError(
+        error => {
+          alert("An error occurred. Please try again.");
+          return throwError(error);
+        }
+      ))
       .subscribe(res => {
         alert("Success! A verification link has been sent if an account exists with this email.");
       });

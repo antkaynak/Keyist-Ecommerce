@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable} from "rxjs/Observable";
+import {Observable, Subscription} from "rxjs";
 import {Cart} from "../../store/cart/cart.reducer";
 import {ActivatedRoute, Router} from "@angular/router";
 import * as fromApp from "../../store/app.reducers";
@@ -8,8 +8,7 @@ import {Store} from "@ngrx/store";
 import * as CartActions from "../../store/cart/cart.actions";
 import * as OrderActions from "../../store/order/order.actions";
 import * as AuthActions from "../../store/auth/auth.actions";
-import {Subscription} from "rxjs/Subscription";
-import 'rxjs/add/operator/take'
+import {take} from "rxjs/operators";
 
 @Component({
   selector: 'app-display-cart',
@@ -66,7 +65,7 @@ export class DisplayCartComponent implements OnInit, OnDestroy {
 
   activatePurchase() {
     this.store.select('auth')
-      .take(1)
+      .pipe(take(1))
       .subscribe(data => {
         if (data.isActive) {
           this.store.dispatch(new OrderActions.IsPurchaseActive(true));

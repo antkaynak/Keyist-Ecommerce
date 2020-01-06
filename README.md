@@ -13,6 +13,8 @@
 This project is a simple e-commerce website powered by Angular 5 on the frontend and Spring Boot for the backend.
 For the full stack list please visit "Built With" section below.
 
+## Updated
+This project is upgraded to Java 11, Spring Boot 2.2.0 and Angular 8+ and some new features added!
 
 ## About This Project
 
@@ -47,7 +49,7 @@ Compatible IDE, Intellij IDEA recommended for this project.
 
 The codes are split into 3 sections. 
 
-frontend - Angular 5 ,
+frontend - Angular 8 ,
 
 resource_server - Spring Boot Backend ,
 
@@ -77,7 +79,8 @@ Keep in mind that both authorization and backend server's pom.xml is configured 
 
 ## Built With
 
-* [Angular](https://angular.io/) - Angular 5 Frontend
+* [Java](https://www.oracle.com/technetwork/java/javase/overview/index.html) - Oracle Java 11 JDK
+* [Angular](https://angular.io/) - Angular 8 Frontend
 * [Rxjs](https://github.com/ReactiveX/rxjs) - Reactive functions
 * [Ngrx Store](https://github.com/ngrx/store) - State management
 * [Bootstrap](http://getbootstrap.com) - UI Components
@@ -105,7 +108,6 @@ Keep in mind that both authorization and backend server's pom.xml is configured 
 * Shipping status only supports packaging and shipped ( 0-1 )
 * The cargo firm options are hard coded in the frontend and backend does not check the selected cargo firm option.
 * Some minor display bugs on mobile.
-* The search function is case sensitive. It shouldn't be.
 
 ## Contributing
 

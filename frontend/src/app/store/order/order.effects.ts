@@ -1,16 +1,12 @@
 import {Injectable} from '@angular/core';
-import {Actions, Effect} from '@ngrx/effects';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/mergeMap';
-
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import * as OrderActions from "./order.actions";
 import * as CartActions from "../cart/cart.actions";
 import {OrderService} from "../../services/order.service";
 import {PostOrdersObject} from "./order.reducer";
 import {Router} from "@angular/router";
-import {Observable} from "rxjs/Observable";
+import {of} from "rxjs";
+import {catchError, map, switchMap} from "rxjs/operators";
 
 
 @Injectable()
@@ -27,24 +23,23 @@ export class OrderEffects { //TODO ERROR HANDLING!!
 
   @Effect()
   postOrder = this.actions$
-    .ofType(OrderActions.POST_ORDER)
-    .map((action: OrderActions.PostOrder) => {
-      console.log('POST_ORDER EFFECT');
-      return action.payload
-    })
-    .switchMap((data: PostOrdersObject) => {
-      return this.orderService.postOrder(data)
-        .switchMap(res => {
-          this.router.navigate(["/checkout/success"]);
-          return [
-            {type: OrderActions.EMPTY_ORDER},
-            {type: CartActions.EMPTY_CART}]
-        }).catch(error => {
-          return Observable.of(
+    .pipe(ofType(OrderActions.POST_ORDER),
+      map((action: OrderActions.PostOrder) => {
+        return action.payload
+      }),
+      switchMap((data: PostOrdersObject) => {
+        return this.orderService.postOrder(data)
+          .pipe(switchMap(res => {
+            this.router.navigate(["/checkout/success"]);
+            return [
+              {type: OrderActions.EMPTY_ORDER},
+              {type: CartActions.EMPTY_CART}]
+          }), catchError(error => {
+          return of(
             new OrderActions.OrderError(
               {error: error, errorEffect: OrderActions.POST_ORDER}));
-        })
-    });
+        }));
+      }));
 
 
   constructor(private actions$: Actions, private orderService: OrderService, private router: Router) {

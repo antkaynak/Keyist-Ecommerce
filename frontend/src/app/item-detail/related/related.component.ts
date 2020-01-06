@@ -1,12 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProductDisplay} from "../../store/cart/cart.reducer";
-import {Subscription} from "rxjs/Subscription";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {ProductService} from "../../services/product.service";
-import {Observable} from "rxjs/Observable";
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/catch';
+import {Subscription, throwError} from "rxjs";
 import {HttpErrorResponse} from "@angular/common/http";
+import {catchError, take} from "rxjs/operators";
 
 @Component({
   selector: 'app-related',
@@ -32,12 +30,13 @@ export class RelatedComponent implements OnInit, OnDestroy {
 
         this.id = params['id'];
         this.productService.getRelatedProducts(this.id)
-          .take(1)
-          .catch(error => {
-            this.fetchError = error;
-            this.innerLoading = false;
-            return Observable.throw(error);
-          })
+          .pipe(take(1), catchError(
+            error => {
+              this.fetchError = error;
+              this.innerLoading = false;
+              return throwError(error);
+            }
+          ))
           .subscribe(
             (data: ProductDisplay[]) => {
               this.relatedProducts = data;
@@ -54,5 +53,4 @@ export class RelatedComponent implements OnInit, OnDestroy {
       this.paramSubscription.unsubscribe();
     }
   }
-
 }

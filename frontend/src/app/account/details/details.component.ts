@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/catch';
 
 @Component({
   selector: 'app-details',

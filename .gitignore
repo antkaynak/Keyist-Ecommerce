@@ -4,6 +4,20 @@ target/
 !**/src/main/**
 !**/src/test/**
 
+# compiled output
+/frontend/dist
+/frontend/tmp
+/frontend/out-tsc
+# Only exists if Bazel was run
+/frontend/bazel-out
+
+# dependencies
+/frontend/node_modules
+
+# profiling files
+chrome-profiler-events*.json
+speed-measure-plugin*.json
+
 ### STS ###
 .apt_generated
 .classpath
@@ -18,6 +32,10 @@ target/
 *.iws
 *.iml
 *.ipr
+.classpath
+.c9/
+*.launch
+.settings/
 
 ### NetBeans ###
 /nbproject/private/

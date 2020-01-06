@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Observable} from "rxjs/Observable";
+import {Subscription, throwError} from "rxjs";
 import {Orders} from "../../store/order/order.reducer";
 import {OrderService} from "../../services/order.service";
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/catch';
-import {Subscription} from "rxjs/Subscription";
+import {catchError, take} from "rxjs/operators";
 
 @Component({
   selector: 'app-list-orders',
@@ -29,11 +27,12 @@ export class ListOrdersComponent implements OnInit {
 
   ngOnInit() {
     this.orderService.getAllOrdersCount()
-      .take(1)
-      .catch(error => {
-        alert("An error occurred loading orders. Please refresh your page.");
-        return Observable.throw(error);
-      })
+      .pipe(take(1), catchError(
+        error => {
+          alert("An error occurred loading orders. Please refresh your page.");
+          return throwError(error);
+        }
+      ))
       .subscribe(data => {
         if (data == 0) {
           this.noOrders = true;
@@ -48,19 +47,19 @@ export class ListOrdersComponent implements OnInit {
   }
 
   pageNavigation() {
-    console.log(this.page);
-
     this.orders = [];
     this.inlineLoading = true;
     if (this.fetchSubscription != null) {
       this.fetchSubscription.unsubscribe();
     }
     this.fetchSubscription = this.orderService.getAllOrders(this.page - 1)
-      .catch(error => {
-        this.fetchError = true;
-        this.inlineLoading = false;
-        return Observable.throw("");
-      })
+      .pipe(catchError(
+        error => {
+          this.fetchError = true;
+          this.inlineLoading = false;
+          return throwError("");
+        }
+      ))
       .subscribe(data => {
         this.orders = data;
         this.inlineLoading = false;

@@ -1,10 +1,21 @@
-.title {
+/* Override ng-bootstrap default accordion component*/
 
-  color: #5E6977;
-  font-size: 18px;
-  font-weight: 400;
+/deep/ .btn{
+  text-decoration: none !important;
 }
 
-.panel-title {
-  color: #5E6977;
+/deep/ .panel-title {
+  color: white;
+  font-size: 18px;
+  font-weight: 400;
+  outline: none;
+  text-decoration: none;
+}
+
+/deep/ .panel-title:focus,  /deep/ .panel-title:hover{
+  text-decoration: none;
+}
+
+/deep/ .card-header {
+  background-color: #5E6977 !important;
 }

@@ -5,7 +5,7 @@
 </div>
 <div *ngIf="noOrders" class="row">
   <div class="col-md-12 col-12 m-auto pb-4">
-    <p class="p-0 m-0" style="color: #5E6977">You do not have any orders. <a routerLink="/browse">Browse now!</a></p>
+    <p class="p-0 m-0 no-order">You do not have any orders. <a routerLink="/browse">Browse now!</a></p>
   </div>
 </div>
 <div class="row">
@@ -20,7 +20,7 @@
   <div *ngFor="let order of orders" class="col-md-12 col-12 pb-4 ">
     <div class="title pb-1">{{order.date }}</div>
     <div class="row pt-2">
-      <div class="col-md-6 col-12" style="border-right: 1px solid #E1E8EE;">
+      <div class="col-md-6 col-12 order-border">
 
         <div class="row">
           <div class="col-md-6 col-6"><p class="details"><span> Ship Name: </span>{{order.shipName}}</p></div>
@@ -65,7 +65,7 @@
 
       </div>
       <div class="col-md-6 col-12">
-        <div class="row" style="height: 300px; overflow-y: scroll;">
+        <div class="row order-list">
           <div *ngFor="let orderDetail of order.orderDetailsList" class="col-md-12 col-12 pb-4">
             <div class="row">
               <div class="col-md-4 col-4">

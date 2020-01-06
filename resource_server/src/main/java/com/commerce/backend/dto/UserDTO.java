@@ -21,11 +21,12 @@ public class UserDTO {
     @CustomEmail
     @NotNull
     @NotEmpty
+    @Size(min = 3, max = 52)
     private String email;
 
     @NotNull
     @NotEmpty
-    @Size(min = 6)
+    @Size(min = 6, max = 52)
     private String password;
 
     @NotNull

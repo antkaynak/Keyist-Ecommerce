@@ -4,12 +4,9 @@ import * as fromApp from "../store/app.reducers";
 import {HttpError} from "../store/app.reducers";
 import * as CartActions from '../store/cart/cart.actions';
 import * as AuthActions from '../store/auth/auth.actions';
-import {Observable} from "rxjs/Observable";
+import {Observable, Subscription} from "rxjs";
 import {Cart} from "../store/cart/cart.reducer";
 import {Router} from "@angular/router";
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/take';
-import {Subscription} from "rxjs/Subscription";
 import {NgbDropdownConfig} from "@ng-bootstrap/ng-bootstrap";
 
 
@@ -86,7 +83,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       return;
     }
     let url = '/search/' + search.value;
-    console.log(url);
+
     this.router.navigate([url]);
   }
 }

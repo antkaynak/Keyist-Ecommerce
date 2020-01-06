@@ -8,14 +8,12 @@ import {PostOrdersObject} from "../../../store/order/order.reducer";
 import {Router} from "@angular/router";
 import {Cart} from "../../../store/cart/cart.reducer";
 import {CartService} from "../../../services/cart.service";
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/take';
-import {Observable} from "rxjs/Observable";
+import {throwError} from "rxjs";
+import {catchError, take} from "rxjs/operators";
 
 @Component({
   selector: 'app-bank-accept',
-  templateUrl: './bank-accept.component.html',
-  styleUrls: ['./bank-accept.component.css']
+  templateUrl: './bank-accept.component.html'
 })
 export class BankAcceptComponent implements OnInit {
 
@@ -37,14 +35,16 @@ export class BankAcceptComponent implements OnInit {
 
 
   paymentConfirm() {
-    this.cartService.confirmCart(this.postOrdersCartObject).take(1).catch(error => {
-      alert("An error occurred. Operation cancelled. Please try again.");
-      if (error.status === 400) {
-        this.store.dispatch(new CartActions.FetchCart());
+    this.cartService.confirmCart(this.postOrdersCartObject).pipe(take(1),catchError(
+      error => {
+        alert("An error occurred. Operation cancelled. Please try again.");
+        if (error.status === 400) {
+          this.store.dispatch(new CartActions.FetchCart());
+        }
+        this.router.navigate(["/checkout"]);
+        return throwError(error);
       }
-      this.router.navigate(["/checkout"]);
-      return Observable.throw(error);
-    }).subscribe(() => {
+    )).subscribe(() => {
       this.store.dispatch(new OrderActions.PostOrder(this.postOrdersObject));
     });
     this.activeModal.close('Close click');

@@ -21,5 +21,5 @@ public interface ProductDisplayRepository extends PagingAndSortingRepository<Pro
 
     List<ProductDisplay> findAllByProductCategoryIsNotOrderBySellCountDesc(ProductCategory productCategory, Pageable pageable);
 
-    List<ProductDisplay> findAllByNameContaining(String name, Pageable pageable);
+    List<ProductDisplay> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 }

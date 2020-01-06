@@ -1,11 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable} from "rxjs/Observable";
+import {Observable, Subscription} from "rxjs";
 import {Store} from "@ngrx/store";
 import {ProductDisplay} from "../../../store/cart/cart.reducer";
 import * as ShowcaseActions from "../../../store/showcase/showcase.actions";
-import {Subscription} from "rxjs/Subscription";
 import * as fromApp from "../../../store/app.reducers";
-import 'rxjs/add/operator/take';
+import {filter, take} from "rxjs/operators";
 
 @Component({
   selector: 'app-interested',
@@ -28,9 +27,9 @@ export class InterestedComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.showcaseState = this.store.select('showcase');
     this.authState = this.store.select("auth");
-    this.authState.take(1).subscribe(data => {
+    this.authState.pipe(take(1)).subscribe(data => {
       if (data.authenticated) {
-        this.showcaseSubscription = this.showcaseState.filter(data => data.interested.length == 0 && !this.isFetched)
+        this.showcaseSubscription = this.showcaseState.pipe(filter(data => data.interested.length == 0 && !this.isFetched))
           .subscribe(
             data => {
               this.store.dispatch(new ShowcaseActions.FetchInterested());

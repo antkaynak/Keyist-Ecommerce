@@ -34,35 +34,36 @@ public class User {
 
     //    @CustomEmail no email field sent from the client - refer to EmailResetDTO
     @Column(name = "email")
+    @Size(min = 3, max = 52)
     private String email;
 
     @Column(name = "password")
     @JsonIgnore
     private String password;
 
-
+    @Column(name = "first_name")
     @Pattern(regexp = "^[a-zA-Z\\s]+$")
     @Size(min = 3, max = 26)
-    @Column(name = "first_name")
     private String firstName;
 
+    @Column(name = "last_name")
     @Pattern(regexp = "^[a-zA-Z\\s]+$")
     @Size(min = 3, max = 26)
-    @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "city")
     @Pattern(regexp = "^[a-zA-Z\\s]+$")
     @Size(min = 3, max = 100)
-    @Column(name = "city")
     private String city;
 
+    @Column(name = "state")
     @Pattern(regexp = "^[a-zA-Z\\s]+$")
     @Size(min = 3, max = 40)
-    @Column(name = "state")
     private String state;
 
-    @Size(min = 5, max = 6)
     @Column(name = "zip")
+    @Pattern(regexp = "^[0-9]*$")
+    @Size(min = 5, max = 6)
     private String zip;
 
     @Column(name = "email_verified")
@@ -72,24 +73,24 @@ public class User {
     @Type(type = "timestamp")
     private Date RegistrationDate;
 
-    @Pattern(regexp = "[0-9]+")
-    @Size(min = 8, max = 11)
     @Column(name = "phone")
+    @Pattern(regexp = "[0-9]+")
+    @Size(min = 11, max = 12)
     private String phone;
 
+    @Column(name = "country")
     @Pattern(regexp = "^[a-zA-Z\\s]+$")
     @Size(min = 3, max = 40)
-    @Column(name = "country")
     private String country;
 
+    @Column(name = "address")
     @Pattern(regexp = "[0-9a-zA-Z #,-]+")
     @Size(min = 3, max = 240)
-    @Column(name = "address")
     private String address;
 
+    @Column(name = "address2")
     @Pattern(regexp = "[0-9a-zA-Z #,-]+")
     @Size(min = 3, max = 240)
-    @Column(name = "address2")
     private String address2;
 
 }

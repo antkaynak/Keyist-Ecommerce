@@ -1,7 +1,11 @@
 
 img {
   width: 100%;
-  height: 700px;
+  height: 85vh;
+}
+
+ngb-carousel{
+  outline: none;
 }
 
 @media only screen and (max-width: 767px) {

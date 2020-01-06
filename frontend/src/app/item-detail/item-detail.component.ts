@@ -1,18 +1,16 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Params, Router} from "@angular/router";
-import {Subscription} from "rxjs/Subscription";
 import {ProductService} from "../services/product.service";
 import {Store} from "@ngrx/store";
 import * as fromApp from '../store/app.reducers';
 import {HttpError} from '../store/app.reducers';
 import * as CartActions from '../store/cart/cart.actions';
 import {Cart, Product} from "../store/cart/cart.reducer";
-import {Observable} from "rxjs/Observable";
+import {Observable, Subscription, throwError} from "rxjs";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {LocationStrategy} from "@angular/common";
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/catch';
 import {HttpErrorResponse} from "@angular/common/http";
+import {catchError, take} from "rxjs/operators";
 
 
 @Component({
@@ -67,12 +65,14 @@ export class ItemDetailComponent implements OnInit, OnDestroy {
         this.id = params['id'];
         this.inlineLoading = true;
         this.productService.getFullProduct(this.id)
-          .take(1)
-          .catch(error => {
-            this.fetchError = error;
-            this.inlineLoading = false;
-            return Observable.throw(error);
-          }).subscribe(
+          .pipe(take(1), catchError(
+            error => {
+              this.fetchError = error;
+              this.inlineLoading = false;
+              return throwError(error);
+            }
+          ))
+          .subscribe(
           (data: Product) => {
             this.product = data;
             this.inlineLoading = false;
@@ -102,7 +102,7 @@ export class ItemDetailComponent implements OnInit, OnDestroy {
     }
 
     this.store.select('auth')
-      .take(1)
+      .pipe(take(1))
       .subscribe(data => {
         if (data.authenticated) {
           this.store.dispatch(new CartActions.AddToCart({id: this.id, amount: val}));
@@ -113,7 +113,6 @@ export class ItemDetailComponent implements OnInit, OnDestroy {
       });
 
   }
-
 
   open(content) {
     this.modalService.open(content);

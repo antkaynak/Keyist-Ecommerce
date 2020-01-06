@@ -7,6 +7,7 @@ import {Store} from "@ngrx/store";
 import {Router} from "@angular/router";
 import * as BlankValidators from "../../services/validators/blank.validator";
 import {AccountService} from "../../services/account.service";
+import {take} from "rxjs/operators";
 
 @Component({
   selector: 'app-order-form',
@@ -25,21 +26,20 @@ export class OrderFormComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.orderForm = new FormGroup({
-      'shipName': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'), Validators.required, BlankValidators.notBlankValidator]),
-      'email': new FormControl(null, [Validators.required, Validators.pattern(this.emailPattern), BlankValidators.notBlankValidator]),
-      'shipAddress': new FormControl(null, [Validators.pattern('[0-9a-zA-Z #,-]+'), Validators.required, BlankValidators.notBlankValidator]),
-      'shipAddress2': new FormControl(null, [Validators.pattern('[0-9a-zA-Z #,-]+'), BlankValidators.checkIfBlankValidator]),
-      'city': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'), Validators.required, BlankValidators.notBlankValidator]),
-      'state': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'), BlankValidators.checkIfBlankValidator]),
-      'zip': new FormControl(null, [Validators.required, Validators.maxLength(6), Validators.minLength(5)]),
-      'country': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'), Validators.required, BlankValidators.notBlankValidator]),
+      'shipName': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'), Validators.required, BlankValidators.notBlankValidator, Validators.minLength(3), Validators.maxLength(52)]),
+      'email': new FormControl(null, [Validators.required, Validators.pattern(this.emailPattern), BlankValidators.notBlankValidator, Validators.minLength(3), Validators.maxLength(26)]),
+      'shipAddress': new FormControl(null, [Validators.pattern('[0-9a-zA-Z #,-]+'), Validators.required, BlankValidators.notBlankValidator, Validators.minLength(3), Validators.maxLength(240)]),
+      'shipAddress2': new FormControl(null, [Validators.pattern('[0-9a-zA-Z #,-]+'), BlankValidators.checkIfBlankValidator, Validators.minLength(3), Validators.maxLength(240)]),
+      'city': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'), Validators.required, BlankValidators.notBlankValidator, Validators.minLength(3), Validators.maxLength(100)]),
+      'state': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'), BlankValidators.checkIfBlankValidator, Validators.minLength(3), Validators.maxLength(40)]),
+      'zip': new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.maxLength(6), Validators.minLength(5)]),
+      'country': new FormControl(null, [Validators.pattern('^[a-zA-Z\\s]+$'), Validators.required, BlankValidators.notBlankValidator, Validators.minLength(3), Validators.maxLength(40)]),
       'phone': new FormControl(null, [Validators.required, Validators.pattern('[0-9]+'), Validators.minLength(11), Validators.maxLength(12)]),
       'cargoFirm': new FormControl(null, [Validators.required, BlankValidators.notBlankValidator]),
     });
 
-    this.accountService.getUser().take(1).subscribe(data => {
+    this.accountService.getUser().pipe(take(1)).subscribe(data => {
       this.orderForm.patchValue({
         shipName: data.firstName + ' ' + data.lastName,
         email: data.email,
@@ -60,7 +60,6 @@ export class OrderFormComponent implements OnInit {
 
 
   onSubmitOrderForm() {
-    console.log(this.orderForm);
     const postData: PostOrdersObject = {
       shipName: this.orderForm.value.shipName.trim(),
       email: this.orderForm.value.email.trim(),
@@ -73,8 +72,6 @@ export class OrderFormComponent implements OnInit {
       phone: this.orderForm.value.phone,
       cargoFirm: this.orderForm.value.cargoFirm
     };
-    console.log(postData);
-    console.log('Posting order from form');
     this.store.dispatch(new OrderActions.PostOrderForm(postData));
     this.router.navigate(["/checkout/payment"]);
   }

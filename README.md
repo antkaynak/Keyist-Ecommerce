@@ -1,8 +1,10 @@
 # Keyist Ecommerce
 
+Demo is now available at https://keyist.tech
+<br>
+Note that demo site might be slower than expected as it has low resources since it is under free hosting :)
 
 ![alt text](https://github.com/antkaynak/Keyist-Ecommerce/blob/master/screen_shots/detail.png)
-
 
 ![alt text](https://github.com/antkaynak/Keyist-Ecommerce/blob/master/screen_shots/cart.png)
 
@@ -11,6 +13,7 @@
 
 ## Getting Started
 This project is a simple e-commerce website powered by Angular 10 on the frontend and Spring Boot for the backend.
+<br>
 For the full stack list please visit "Built With" section below.
 
 Ecommerce is a complex business. It involves many edge cases and a solid system architecture. This project is simply a demo demonstrating basic features which is only the tip of an iceberg. This project might ( and certainly does ) have bugs, vulnerabilities or some other types of issues. So, contributions are always welcome :)
@@ -32,6 +35,7 @@ This project is upgraded to Java 11, Spring Boot 2.3.3 and Angular 10+ and some 
 
 ### Disclaimer
 This is a fully functional demo site and may have security vulnerabilities as user data is not encrypted with SSL.
+<br>
 The provided codes are not ready for production and should only be used for education purposes.
 
 ### Prerequisites

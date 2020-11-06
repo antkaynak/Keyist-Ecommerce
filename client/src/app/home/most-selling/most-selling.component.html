@@ -1,0 +1,27 @@
+<div class="most-selling container" *ngIf="!(showcaseState | async).errors.includes('FETCH_NEWLY_ADDED')">
+  <div class="col-md-12">
+    <h3 class="title">Most Selling</h3>
+  </div>
+  <div *ngIf="(showcaseState | async).loading.includes('FETCH_NEWLY_ADDED')" class="loader"></div>
+  <div *ngIf="!(showcaseState | async).loading.includes('FETCH_NEWLY_ADDED')" class="scroll-left"
+    (click)="scrollLeft()"></div>
+  <div *ngIf="!(showcaseState | async).loading.includes('FETCH_NEWLY_ADDED')" class="most-cards" #mostCards>
+    <div class="most-card col-lg-3 col-md-6 col-12" *ngFor="let m of (showcaseState | async).mostSelling">
+      <a routerLink="/detail/{{m.url}}/{{m.productVariant.id}}">
+        <img src="{{m.productVariant.thumb}}" alt="{{m.name}}">
+        <hr>
+        <p class="product-name">{{m.name}}</p>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="product-color" [ngStyle]="{'background-color': m.productVariant.color.hex}"></div>
+          </div>
+          <div class="col-md-6">
+            <p>{{m.productVariant.price}} €</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div *ngIf="!(showcaseState | async).loading.includes('FETCH_NEWLY_ADDED')" class="scroll-right"
+    (click)="scrollRight()"></div>
+</div>

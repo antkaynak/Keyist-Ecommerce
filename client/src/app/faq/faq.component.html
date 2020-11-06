@@ -1,0 +1,30 @@
+<div class="container faq">
+  <div class="title">
+    <p>FAQ</p>
+  </div>
+  <hr>
+  <div class="accordion">
+    <ngb-accordion #acc="ngbAccordion" [closeOthers]="false" [destroyOnHide]="true">
+      <ngb-panel id="static-1">
+        <ng-template ngbPanelTitle>
+          <span class="panel-title">What is Keyist?</span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          Ecommerce is a complex business. It involves many edge cases and a solid system architecture. This project is
+          simply a demo demonstrating basic features which is only the tip of an iceberg.
+          This project might ( and certainly does ) have bugs, vulnerabilities or some other types of issues. So,
+          contributions are welcome :)
+        </ng-template>
+      </ngb-panel>
+      <ngb-panel id="static-2">
+        <ng-template ngbPanelTitle>
+          <span class="panel-title w-100">How can I contact you?</span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          Source code can be found in <a href="https://github.com/antkaynak">my github page.</a>
+          If you want to contact me you can mail me at antkaynak1@gmail.com
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+  </div>
+</div>

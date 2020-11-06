@@ -1,0 +1,51 @@
+<div class="personal">
+
+  <div *ngIf="innerLoading" class="loader"></div>
+
+  <div *ngIf="!innerLoading">
+    <form [formGroup]="personalForm" (ngSubmit)="onSubmitOrderForm()">
+      <div class="info row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="shipName">NAME SURNAME</label>
+            <input type="text" id="shipName" class="form-control" name="shipName" formControlName="shipName"
+              [maxlength]="104">
+            <span *ngIf="personalForm.get('shipName').invalid && personalForm.get('shipName').touched">
+              <span *ngIf="personalForm.get('shipName').errors['required']" class="alert-danger">This field is
+                required!</span>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="phone">PHONE NUMBER</label>
+            <input type="text" id="phone" class="form-control" name="phone" formControlName="phone" [maxlength]="12">
+            <span *ngIf="personalForm.get('phone').invalid && personalForm.get('phone').touched" class="alert-danger">
+              Please enter a valid phone number!
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+        </div>
+        <div class="controls col-md-6">
+          <div class="row">
+            <div class="col-md-6">
+              <a routerLink="/cart" class="btn back" type="button">
+                Back to Cart
+              </a>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-info" type="submit" [disabled]="personalForm.invalid || personalForm.pending">
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>

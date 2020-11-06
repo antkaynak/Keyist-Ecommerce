@@ -4,17 +4,19 @@
 ![alt text](https://github.com/antkaynak/Keyist-Ecommerce/blob/master/screen_shots/detail.png)
 
 
-![alt text](https://github.com/antkaynak/Keyist-Ecommerce/blob/master/screen_shots/cart_2.png)
+![alt text](https://github.com/antkaynak/Keyist-Ecommerce/blob/master/screen_shots/cart.png)
 
 ![alt text](https://github.com/antkaynak/Keyist-Ecommerce/blob/master/screen_shots/orders.png)
 
 
 ## Getting Started
-This project is a simple e-commerce website powered by Angular 5 on the frontend and Spring Boot for the backend.
+This project is a simple e-commerce website powered by Angular 10 on the frontend and Spring Boot for the backend.
 For the full stack list please visit "Built With" section below.
 
+Ecommerce is a complex business. It involves many edge cases and a solid system architecture. This project is simply a demo demonstrating basic features which is only the tip of an iceberg. This project might ( and certainly does ) have bugs, vulnerabilities or some other types of issues. So, contributions are always welcome :)
+
 ## Updated
-This project is upgraded to Java 11, Spring Boot 2.2.0 and Angular 8+ and some new features added!
+This project is upgraded to Java 11, Spring Boot 2.3.3 and Angular 10+ and some new features added!
 
 ## About This Project
 
@@ -26,7 +28,6 @@ This project is upgraded to Java 11, Spring Boot 2.2.0 and Angular 8+ and some n
 * You can view your orders and change your account settings.
 * You can request a password forgot request and use the token in your mail.
 * You can search items.
-* Fully responsive and support for mobile and tablets!
 
 
 ### Disclaimer
@@ -49,7 +50,7 @@ Compatible IDE, Intellij IDEA recommended for this project.
 
 The codes are split into 3 sections. 
 
-frontend - Angular 8 ,
+frontend - Angular 10 ,
 
 resource_server - Spring Boot Backend ,
 
@@ -63,7 +64,7 @@ For MySQL Database
 
 ```
 SQL script can be found in the sql folder.
-backend.sql is the basic user info and oauth2.sql is the tables for the oauth2 implementation.
+script.sql contains both the basic user info and the tables for the oauth2 implementation.
 
 ```
 
@@ -76,11 +77,19 @@ Keep in mind that both authorization and backend server's pom.xml is configured 
 
 ```
 
+For Undertow Application Server
+
+```
+This project uses undertow as default.
+Keep in mind that both authorization and backend server's pom.xml is configured to compile a jar file.
+
+```
+
 
 ## Built With
 
 * [Java](https://www.oracle.com/technetwork/java/javase/overview/index.html) - Oracle Java 11 JDK
-* [Angular](https://angular.io/) - Angular 8 Frontend
+* [Angular](https://angular.io/) - Angular 10 Frontend
 * [Rxjs](https://github.com/ReactiveX/rxjs) - Reactive functions
 * [Ngrx Store](https://github.com/ngrx/store) - State management
 * [Bootstrap](http://getbootstrap.com) - UI Components
@@ -103,15 +112,14 @@ Keep in mind that both authorization and backend server's pom.xml is configured 
 * CORS filter allows requests from every url.
 * You might be interested is not functional at this version.
 * Sometimes when you refresh the page loading cart stucks.
-* No color selection at the item detail page.
 * No admin panel at all as of yet.
 * Shipping status only supports packaging and shipped ( 0-1 )
-* The cargo firm options are hard coded in the frontend and backend does not check the selected cargo firm option.
-* Some minor display bugs on mobile.
+* No cargo firm selecting when purchasing.
+* Mobile devices are not supported, yet. Contributons are welcome!
 
 ## Contributing
 
-If you want to contribute to this project you can e-mail me - antkaynak1@gmail.com or you can pull request.
+If you want to contribute to this project you can email me - antkaynak1@gmail.com or you can pull request.
 
 ## Versioning
 

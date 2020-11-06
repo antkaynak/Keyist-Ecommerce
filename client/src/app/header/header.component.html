@@ -1,0 +1,175 @@
+<div class="header fixed-top">
+
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <a class="logo navbar-brand" routerLink="/">Keyist</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" (click)="isCollapsed = !isCollapsed"
+      data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="pages navbar-nav">
+      <div class="home">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
+          <a class="nav-link" routerLinkActive="active" routerLink="/"
+            [routerLinkActiveOptions]="{exact: true}">Home</a>
+        </div>
+      </div>
+
+      <div class="products">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
+          <a class="nav-link" routerLinkActive="active" routerLink="/browse"
+            [routerLinkActiveOptions]="{exact: true}">Products</a>
+        </div>
+      </div>
+
+      <div class="about">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
+          <a class="nav-link" routerLinkActive="active" routerLink="/faq"
+            [routerLinkActiveOptions]="{exact: true}">About</a>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="search navbar-nav">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
+        <div class="form-inline search">
+          <input #search class="form-control" type="search" placeholder="Search" (keyup.enter)="searchProduct(search)"
+            aria-label="Search">
+        </div>
+      </div>
+    </div>
+
+    <div class="end navbar-nav">
+      <div class="login" *ngIf="!(authState | async).authenticated">
+        <a class="nav-link" routerLink="/login">
+          <p>Login</p>
+        </a>
+      </div>
+
+      <div class="register" *ngIf="!(authState | async).authenticated">
+        <a class="nav-link btn" routerLink="/signup">
+          <p>Sign up</p>
+        </a>
+      </div>
+
+      <div class="user" *ngIf="(authState | async).authenticated">
+        <div ngbDropdown display="dynamic" placement="bottom" autoClose="true">
+          <a class="nav-link" id="dropdownAccount" ngbDropdownToggle>
+            <i class="fa fa-user"></i>
+          </a>
+          <div class="user-dropdown" ngbDropdownMenu aria-labelledby="dropdownAccount">
+            <div>
+              <a routerLink="/account/information" routerLinkActive="active">
+                <i class="fa fa-user-o" aria-hidden="true"></i>
+                <p>User Information</p>
+              </a>
+            </div>
+            <div>
+              <a routerLink="/account/orders" routerLinkActive="active"> <i class="fa fa-archive"
+                  aria-hidden="true"></i>
+                <p>Orders</p>
+              </a>
+            </div>
+            <div>
+              <a routerLink="/account/address" routerLinkActive="active"><i class="fa fa-home" aria-hidden="true"></i>
+                <p>Address</p>
+              </a>
+            </div>
+            <div>
+              <a routerLink="/account/help" routerLinkActive="active"> <i class="fa fa-question-circle-o"
+                  aria-hidden="true"></i>
+                <p>Help</p>
+              </a>
+            </div>
+            <div>
+              <a (click)="userSignOut()"> <i class="fa fa fa-sign-out" aria-hidden="true"></i>
+                <p>Logout</p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cart navbar-nav" *ngIf="(authState | async).authenticated">
+        <div *ngFor="let e of (cartState | async).errors">
+          <div *ngIf="e.errorEffect == 'FETCH_CART'">
+            <div class="alert-danger">Error</div>
+          </div>
+        </div>
+
+        <div *ngIf="(cartState | async).fetchLoading" class="loader"></div>
+        <div *ngIf="!(cartState | async).fetchLoading" ngbDropdown display="dynamic" placement="bottom"
+          autoClose="true">
+
+          <div id="dropdownCart nav-link" ngbDropdownToggle>
+            <i class="fa fa-shopping-cart"></i>
+            <div class="item-count">
+              {{cartItemCount}}
+            </div>
+
+          </div>
+
+          <div ngbDropdownMenu aria-labelledby="dropdownCart" class="cart-inside">
+            <div *ngIf="(cartState | async).cart && (cartState | async).cart.cartItems.length" class="list-group">
+
+              <div class="product">
+                <a *ngFor="let cartItem of (cartState | async).cart.cartItems" class="row"
+                  routerLink="/detail/{{cartItem.url}}">
+                  <div class="col-md-4">
+                    <div class="color" [ngStyle]="{'background-color': cartItem.color.hex}"></div>
+                    <img src="{{cartItem.thumb}}" alt="{{cartItem.name}}">
+                  </div>
+                  <div class="col-md-8 details">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <p class="product-name">{{cartItem.name}}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="amount">Amount: <span>{{cartItem.amount}}</span></p>
+                      </div>
+                      <div class="col-md-6">
+                        <p class="price">{{cartItem.price}} €</p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+
+              </div>
+
+              <div class="controls">
+                <div class="row">
+                  <div class="col-md-6">
+                    <a routerLink="/cart" class="btn">Go to Cart</a>
+                  </div>
+                  <div class="col-md-6">
+                    <button (click)="activatePurchase()" class="btn btn-info">Checkout</button>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+
+            <div *ngIf="!(cartState | async).cart || !(cartState | async).cart.cartItems.length" class="empty-cart">
+              <p>Your cart is empty.</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </nav>
+
+  <div *ngIf="(authState | async).authenticated && (authState | async).isActive == false"
+    class="user-warning alert-warning">
+    <hr class="p-0 m-0">
+    Welcome to Keyist! Your account is inactive. Please check your email and activate!
+    <hr class="p-0 m-0">
+  </div>
+</div>

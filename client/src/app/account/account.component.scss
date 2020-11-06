@@ -1,0 +1,58 @@
+.account {
+  position: relative;
+  top: 150px;
+  min-height: 50vh;
+
+  .links {
+    div {
+      padding: 8px;
+    }
+    .title {
+      margin-left: 22px;
+      margin-bottom: 5px;
+      color: black;
+      font-weight: bold;
+      font-size: 18px;
+      p {
+        margin: 0;
+      }
+    }
+
+    i {
+      font-size: 18px;
+    }
+
+    a {
+      p {
+        display: inline;
+        margin: 0;
+        color: gray;
+        margin-left: 5px;
+      }
+      i {
+        position: relative;
+        top: 1px;
+        color: gray;
+        font-size: 20px;
+        align-content: center;
+
+        &.fa-archive,
+        &.fa-user-o {
+          font-size: 16px;
+          margin-right: 2px;
+        }
+      }
+      text-decoration: none;
+
+      &.active {
+        p,
+        i {
+          color: #17a2b8;
+        }
+      }
+    }
+  }
+
+  .panel {
+  }
+}

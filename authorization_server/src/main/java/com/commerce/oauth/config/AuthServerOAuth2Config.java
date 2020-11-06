@@ -20,7 +20,6 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableAuthorizationServer
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
@@ -42,7 +41,6 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
         return new JdbcTokenStore(dataSource);
     }
 
-
     @Bean
     public OAuth2AccessDeniedHandler oauthAccessDeniedHandler() {
         return new OAuth2AccessDeniedHandler();
@@ -55,7 +53,6 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
                 .passwordEncoder(oauthClientPasswordEncoder);
     }
 
-    //Credentials for angular front end client and resource server.
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.jdbc(dataSource);

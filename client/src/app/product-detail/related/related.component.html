@@ -1,0 +1,26 @@
+<div class="related" *ngIf="!fetchError">
+  <div class="col-md-12">
+    <h3 class="title">Related Products</h3>
+  </div>
+  <div *ngIf="innerLoading" class="loader"></div>
+  <div *ngIf="!innerLoading" class="scroll-left" (click)="scrollLeft()"></div>
+  <div *ngIf="!innerLoading" class="related-cards" #relatedCards>
+    <div class="related-card col-lg-3 col-md-6 col-12" *ngFor="let r of relatedProducts; let i = index"
+      id="related-card-{{i}}">
+      <a routerLink="/detail/{{r.url}}/{{r.productVariants[0].id}}">
+        <img src="{{r.productVariants[0].thumb}}" alt="{{r.name}}">
+        <hr>
+        <p class="product-name">{{r.name}}</p>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="product-color" [ngStyle]="{'background-color': r.productVariants[0].color.hex}"></div>
+          </div>
+          <div class="col-md-6">
+            <p>{{r.productVariants[0].price}} €</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div *ngIf="!innerLoading" class="scroll-right" (click)="scrollRight()"></div>
+</div>

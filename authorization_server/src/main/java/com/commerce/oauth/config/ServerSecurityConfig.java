@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 
 @Configuration
-//@EnableWebSecurity
 @Order(SecurityProperties.BASIC_AUTH_ORDER)
 public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
 

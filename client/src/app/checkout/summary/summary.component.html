@@ -1,0 +1,85 @@
+<div class="summary" *ngIf="(cartState | async).cart">
+  <div class="title">
+    Summary
+  </div>
+  <div class="product">
+    <div *ngFor="let cartItem of (cartState | async).cart.cartItems" class="row">
+      <div class="col-md-4">
+        <div class="color" [ngStyle]="{'background-color': cartItem.color.hex}"></div>
+        <img src="{{cartItem.thumb}}" alt="{{cartItem.name}}">
+      </div>
+      <div class="col-md-8 details">
+        <div class="row">
+          <div class="col-md-12">
+            <p class="product-name">{{cartItem.name}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <p class="amount">Amount: <span>{{cartItem.amount}}</span></p>
+          </div>
+          <div class="col-md-6">
+            <p class="price">{{cartItem.price}} €</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pricing">
+    <div class="row">
+      <div class="col-md-4 col-4">
+        <span class="label">Cart</span>
+      </div>
+      <div class="col-md-8 col-8">
+        <span>{{(cartState | async).cart.totalCartPrice.toFixed(2) | number:'1.2' }} €</span>
+      </div>
+    </div>
+    <div class="row ">
+      <div class="col-md-4 col-4">
+        <span class="label">Shipping</span>
+      </div>
+      <div class="col-md-8 col-8">
+        <span>{{(cartState | async).cart.totalCargoPrice.toFixed(2) | number:'1.2' }} €</span>
+      </div>
+    </div>
+
+    <div *ngIf="(cartState | async).cart && (cartState | async).cart.discount" class="row">
+      <div class="col-md-4 col-4">
+        <span class="label discount-text">Discount</span>
+      </div>
+      <div class="col-md-8 col-8">
+        <span class="discount-text">{{(cartState | async).cart.discount.discountPercent}}%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="total">
+    <div class="row">
+      <div class="col-md-4 col-4">
+        <span class="label">Total</span>
+      </div>
+      <div class="col-md-8 col-8">
+        <span>{{(cartState | async).cart.totalPrice.toFixed(2) | number:'1.2' }} €</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="purchase" *ngIf="(orderState | async).checkoutStep === 3">
+    <div class="row">
+      <div class="col-md-12">
+        <input type="checkbox" name="terms" id="terms" (change)="termsAccepted = !termsAccepted">
+        <label for="terms">
+          <p>I have read and confirm</p>
+        </label>
+        <div class="terms-text" (click)="openTermsModel()">
+          <p>the terms of service.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <Button class="btn btn-info" (click)="openBankModal()" [disabled]="!termsAccepted">
+        Purchase
+      </Button>
+    </div>
+  </div>
+</div>

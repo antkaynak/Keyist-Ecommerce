@@ -1,0 +1,127 @@
+.list-orders {
+  .title {
+    p {
+      margin: 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: black;
+    }
+  }
+
+  .order {
+    margin-top: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    .order-title {
+      p {
+        margin: 0;
+        display: inline;
+        font-weight: bold;
+        color: black;
+        span {
+          color: #17a2b8;
+          font-weight: 400;
+        }
+      }
+
+      .date {
+        text-align: center;
+      }
+
+      .status {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+      }
+    }
+
+    hr {
+      margin-left: -20px;
+      margin-right: -20px;
+    }
+
+    .left-panel {
+      p {
+        margin: 0;
+        padding-bottom: 10px;
+        font-weight: bold;
+        color: black;
+        span {
+          color: gray;
+          font-weight: 400;
+        }
+      }
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .right-panel {
+      .item-list {
+        max-height: 25vh;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        overflow: hidden;
+        overflow-y: scroll;
+        p {
+          margin: 0;
+          font-size: 14px;
+        }
+        img {
+          height: 75px;
+          width: 75px;
+          margin-left: 15px;
+        }
+
+        .color {
+          position: relative;
+          top: 50%;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+        }
+
+        .item {
+          cursor: pointer;
+        }
+
+        .details {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          .product-name {
+            color: black;
+            font-weight: bold;
+          }
+          .amount {
+            span {
+              color: gray;
+            }
+          }
+
+          .price {
+            color: #17a2b8;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+
+  .bottom {
+    position: relative;
+    top: 50px;
+  }
+
+  ngb-pagination ::ng-deep ul > li:not(.active) > a {
+    background-color: white !important;
+    border: none;
+    color: gray;
+  }
+
+  ngb-pagination ::ng-deep ul > li.active > a {
+    background-color: #17a2b8 !important;
+    color: white !important;
+    border-color: #dee2e6 !important;
+    border-radius: 10px;
+  }
+}

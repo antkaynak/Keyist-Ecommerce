@@ -1,0 +1,15 @@
+.bar {
+  position: relative;
+  top: 30px;
+  text-align: center;
+  p {
+    color: gray;
+    margin-bottom: 5px;
+    font-size: 14px;
+
+    &.active {
+      color: black;
+      font-weight: bold;
+    }
+  }
+}

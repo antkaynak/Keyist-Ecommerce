@@ -1,144 +1,197 @@
 package com.commerce.backend.service;
 
-import com.commerce.backend.dao.CartItemRepository;
+import com.commerce.backend.converter.cart.CartResponseConverter;
 import com.commerce.backend.dao.CartRepository;
-import com.commerce.backend.dao.ProductDisplayRepository;
-import com.commerce.backend.dao.UserRepository;
-import com.commerce.backend.model.Cart;
-import com.commerce.backend.model.CartItem;
-import com.commerce.backend.model.ProductDisplay;
-import com.commerce.backend.model.User;
+import com.commerce.backend.error.exception.InvalidArgumentException;
+import com.commerce.backend.error.exception.ResourceNotFoundException;
+import com.commerce.backend.model.dto.CartItemDTO;
+import com.commerce.backend.model.entity.Cart;
+import com.commerce.backend.model.entity.CartItem;
+import com.commerce.backend.model.entity.ProductVariant;
+import com.commerce.backend.model.entity.User;
+import com.commerce.backend.model.request.cart.ConfirmCartRequest;
+import com.commerce.backend.model.response.cart.CartResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class CartServiceImpl implements CartService {
 
-
     private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
-    private final ProductDisplayRepository productDisplayRepository;
-    private final PriceService priceService;
-    private final UserRepository userRepository;
+    private final ProductService productService;
+    private final UserService userService;
+    private final CartResponseConverter cartResponseConverter;
 
 
     @Autowired
-    public CartServiceImpl(CartRepository cartRepository, CartItemRepository cartItemRepository,
-                           ProductDisplayRepository productDisplayRepository, PriceService priceService,
-                           UserRepository userRepository) {
+    public CartServiceImpl(CartRepository cartRepository,
+                           ProductService productService,
+                           UserService userService,
+                           CartResponseConverter cartResponseConverter) {
         this.cartRepository = cartRepository;
-        this.cartItemRepository = cartItemRepository;
-        this.productDisplayRepository = productDisplayRepository;
-        this.priceService = priceService;
-        this.userRepository = userRepository;
+        this.productService = productService;
+        this.userService = userService;
+        this.cartResponseConverter = cartResponseConverter;
     }
 
     @Override
-    public Cart addToCart(Principal principal, Long id, Integer amount) {
-        User user = getUserFromPrinciple(principal);
-        if (amount <= 0 || id <= 0) {
-            throw new IllegalArgumentException("Invalid parameters");
-        }
-
+    public CartResponse addToCart(Long productVariantId, Integer amount) {
+        User user = userService.getUser();
         Cart cart = user.getCart();
-        if (cart == null) {
-            cart = new Cart();
-            cart.setCartUser(user);
-            //usersRepository.save(user); deleted because it caused the cart to be saved twice
-        } else if (cart.getCartItemList() != null || !cart.getCartItemList().isEmpty()) {
-            for (CartItem i : cart.getCartItemList()) {
-                if (i.getCartProduct().getId().equals(id)) {
-                    i.setAmount(i.getAmount() + amount);
-//                CartItem ct = cartItemRepository.save(i);
-                    Cart returnCart = priceService.calculatePrice(cart);
-                    cartRepository.save(returnCart);
-//                    return new ResponseEntity<Cart>(returnCart,HttpStatus.OK);
-                    return returnCart;
+
+        if (Objects.nonNull(cart) && Objects.nonNull(cart.getCartItemList()) && !cart.getCartItemList().isEmpty()) {
+            Optional<CartItem> cartItem = cart.getCartItemList()
+                    .stream()
+                    .filter(ci -> ci.getProductVariant().getId().equals(productVariantId)).findFirst();
+            if (cartItem.isPresent()) {
+                if (cartItem.get().getProductVariant().getStock() < (cartItem.get().getAmount() + amount)) {
+                    throw new InvalidArgumentException("Product does not have desired stock.");
                 }
+                cartItem.get().setAmount(cartItem.get().getAmount() + amount);
+                Cart updatedCart = calculatePrice(cart);
+                cart = cartRepository.save(updatedCart);
+                return cartResponseConverter.apply(cart);
             }
         }
 
-        Optional optional = productDisplayRepository.findById(id);
-        if (!optional.isPresent()) {
-            throw new IllegalArgumentException("Product not found.");
+        if (Objects.isNull(cart)) {
+            cart = createCart(user);
         }
 
-        ProductDisplay product = (ProductDisplay) optional.get();
+        ProductVariant productVariant = productService.findProductVariantById(productVariantId);
+
+        if (productVariant.getStock() < amount) {
+            throw new InvalidArgumentException("Product does not have desired stock.");
+        }
+
         CartItem cartItem = new CartItem();
         cartItem.setAmount(amount);
-        cartItem.setCartProduct(product);
-
-        //this will save the cart object as well because there is cascading from cartItem
+        cartItem.setProductVariant(productVariant);
         cartItem.setCart(cart);
-        if (cart.getCartItemList() == null) {
+
+        if (Objects.isNull(cart.getCartItemList())) {
             cart.setCartItemList(new ArrayList<>());
         }
         cart.getCartItemList().add(cartItem);
-        cart = priceService.calculatePrice(cart);
-        cartItemRepository.save(cartItem);
+        cart = calculatePrice(cart);
 
-        return cart;
+        cart = cartRepository.save(cart);
+        return cartResponseConverter.apply(cart);
     }
 
     @Override
-    public Cart fetchCart(Principal principal) {
-        System.out.println("FETCH CART");
-        User user = getUserFromPrinciple(principal);
-        return user.getCart();
-    }
-
-    @Override
-    public Cart removeFromCart(Principal principal, Long id) {
-        System.out.println("Remove CartItem id " + id);
-        User user = getUserFromPrinciple(principal);
+    public CartResponse incrementCartItem(Long cartItemId, Integer amount) {
+        User user = userService.getUser();
         Cart cart = user.getCart();
-        if (cart == null) {
-            throw new IllegalArgumentException("Cart not found");
+        if (Objects.isNull(cart) || Objects.isNull(cart.getCartItemList()) || cart.getCartItemList().isEmpty()) {
+            throw new ResourceNotFoundException("Empty cart");
         }
-        List<CartItem> cartItemsList = cart.getCartItemList();
-        CartItem cartItemToDelete = null;
-        for (CartItem i : cartItemsList) {
-            if (i.getId().equals(id)) {
-                cartItemToDelete = i;
+
+        CartItem cartItem = cart.getCartItemList()
+                .stream()
+                .filter(ci -> ci.getId().equals(cartItemId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("CartItem not found"));
+
+        if (cartItem.getProductVariant().getStock() < (cartItem.getAmount() + amount)) {
+            throw new InvalidArgumentException("Product does not have desired stock.");
+        }
+
+        cartItem.setAmount(cartItem.getAmount() + amount);
+        cart = calculatePrice(cart);
+        cart = cartRepository.save(cart);
+        return cartResponseConverter.apply(cart);
+    }
+
+    @Override
+    public CartResponse decrementCartItem(Long cartItemId, Integer amount) {
+        User user = userService.getUser();
+        Cart cart = user.getCart();
+        if (Objects.isNull(cart) || Objects.isNull(cart.getCartItemList()) || cart.getCartItemList().isEmpty()) {
+            throw new ResourceNotFoundException("Empty cart");
+        }
+
+        CartItem cartItem = cart.getCartItemList()
+                .stream()
+                .filter(ci -> ci.getId().equals(cartItemId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("CartItem not found"));
+
+
+        if (cartItem.getAmount() <= amount) {
+            List<CartItem> cartItemList = cart.getCartItemList();
+            cartItemList.remove(cartItem);
+            if (Objects.isNull(cart.getCartItemList()) || cart.getCartItemList().isEmpty()) {
+                user.setCart(null);
+                userService.saveUser(user);
+                return null;
             }
-        }
-        if (cartItemToDelete == null) {
-            throw new IllegalArgumentException("CartItem not found");
+            cart.setCartItemList(cartItemList);
+            cart = calculatePrice(cart);
+            cart = cartRepository.save(cart);
+            return cartResponseConverter.apply(cart);
         }
 
-        cartItemsList.remove(cartItemToDelete);
+        cartItem.setAmount(cartItem.getAmount() - amount);
+        cart = calculatePrice(cart);
+        cart = cartRepository.save(cart);
+        return cartResponseConverter.apply(cart);
+    }
 
-        if (cart.getCartItemList() == null || cart.getCartItemList().size() == 0) {
-            //TODO make it so it can be deleted with online cartRepository.delete method
-//            cartRepository.delete(cart);
+    @Override
+    public CartResponse fetchCart() {
+        Cart cart = userService.getUser().getCart();
+        if (cart == null) {
+            return null;
+        }
+        return cartResponseConverter.apply(cart);
+    }
+
+    @Override
+    public CartResponse removeFromCart(Long cartItemId) {
+        User user = userService.getUser();
+        Cart cart = user.getCart();
+
+        if (Objects.isNull(cart) || Objects.isNull(cart.getCartItemList()) || cart.getCartItemList().isEmpty()) {
+            throw new ResourceNotFoundException("Cart or CartItem not found");
+        }
+
+        List<CartItem> cartItemsList = cart.getCartItemList();
+        Optional<CartItem> cartItem = cart.getCartItemList()
+                .stream()
+                .filter(ci -> ci.getId().equals(cartItemId)).findFirst();
+        if (cartItem.isEmpty()) {
+            throw new ResourceNotFoundException("CartItem not found");
+        }
+
+        cartItemsList.remove(cartItem.get());
+
+        if (Objects.isNull(cart.getCartItemList()) || cart.getCartItemList().isEmpty()) {
             user.setCart(null);
-            //setting it to null will delete it
-            //because of the orphanRemove mark on the field
-            userRepository.save(user);
+            userService.saveUser(user);
             return null;
         }
 
         cart.setCartItemList(cartItemsList);
-        cart = priceService.calculatePrice(cart);
-        cartItemRepository.delete(cartItemToDelete);
-
-        return cart;
+        cart = calculatePrice(cart);
+        cart = cartRepository.save(cart);
+        return cartResponseConverter.apply(cart);
     }
 
     @Override
-    public Boolean confirmCart(Principal principal, Cart cart) {
-        User user = getUserFromPrinciple(principal);
-        Cart dbCart = user.getCart();
-        if (dbCart == null) {
-            throw new IllegalArgumentException("Cart not found");
+    public boolean confirmCart(ConfirmCartRequest confirmCartRequest) {
+        Cart dbCart = userService.getUser().getCart();
+        if (Objects.isNull(dbCart)) {
+            return false;
         }
         List<CartItem> dbCartItemsList = dbCart.getCartItemList();
-        List<CartItem> cartItemsList = cart.getCartItemList();
+        List<CartItemDTO> cartItemsList = confirmCartRequest.getCartItems();
         if (dbCartItemsList.size() != cartItemsList.size()) {
             return false;
         }
@@ -146,49 +199,74 @@ public class CartServiceImpl implements CartService {
         for (int i = 0; i < dbCartItemsList.size(); i++) {
             if (!dbCartItemsList.get(i).getId().equals(cartItemsList.get(i).getId()) &&
                     !dbCartItemsList.get(i).getAmount().equals(cartItemsList.get(i).getAmount()) &&
-                    !dbCartItemsList.get(i).getCartProduct().getId().equals(cartItemsList.get(i).getCartProduct().getId())) {
+                    !dbCartItemsList.get(i).getProductVariant().getId().equals(cartItemsList.get(i).getId())) {
                 return false;
             }
         }
-        if (
-                dbCart.getTotalPrice().equals(cart.getTotalPrice())
-                        && dbCart.getTotalCargoPrice().equals(cart.getTotalCargoPrice())
-                        && dbCart.getId().equals(cart.getId())) {
-            if (dbCart.getCartDiscount() != null && cart.getCartDiscount() != null) {
-                if (dbCart.getCartDiscount().getDiscountPercent().equals(cart.getCartDiscount().getDiscountPercent())
-                        && dbCart.getCartDiscount().getCode().equals(cart.getCartDiscount().getCode())) {
-                    System.out.println("equals");
-                    return true;
-                }
-            } else if (dbCart.getCartDiscount() == null && cart.getCartDiscount() == null) {
-                System.out.println("equals");
-                return true;
-            }
 
+        if (dbCart.getTotalPrice().equals(confirmCartRequest.getTotalPrice()) &&
+                dbCart.getTotalCargoPrice().equals(confirmCartRequest.getTotalCargoPrice()) &&
+                dbCart.getTotalCartPrice().equals(confirmCartRequest.getTotalCartPrice())) {
+            if (Objects.nonNull(dbCart.getDiscount()) && Objects.nonNull(confirmCartRequest.getDiscount())) {
+                return dbCart.getDiscount().getDiscountPercent().equals(confirmCartRequest.getDiscount().getDiscountPercent());
+            }
+            return Objects.isNull(dbCart.getDiscount()) && Objects.isNull(confirmCartRequest.getDiscount());
         }
-        System.out.println("no u");
-        System.out.println(dbCart.getCartItemList().equals(cart.getCartItemList()));
         return false;
     }
 
     @Override
-    public void emptyCart(Principal principal) {
-        User user = getUserFromPrinciple(principal);
+    public void emptyCart() {
+        User user = userService.getUser();
         user.setCart(null);
-        userRepository.save(user);
+        userService.saveUser(user);
+    }
+
+    @Override
+    public Cart getCart() {
+        return userService.getUser().getCart();
     }
 
 
-    private User getUserFromPrinciple(Principal principal) {
-        if (principal == null || principal.getName() == null) {
-            throw new IllegalArgumentException("Invalid access");
+    @Override
+    public void saveCart(Cart cart) {
+        if (Objects.isNull(cart)) {
+            throw new InvalidArgumentException("Cart is null");
         }
-        User user = userRepository.findByEmail(principal.getName());
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
-        }
-        return user;
+        cartRepository.save(cart);
     }
 
+    @Override
+    public Cart calculatePrice(Cart cart) {
+        cart.setTotalCartPrice(0F);
+        cart.setTotalCargoPrice(0F);
+        cart.setTotalPrice(0F);
 
+        cart.getCartItemList().forEach(cartItem -> {
+            cart.setTotalCartPrice(cart.getTotalCartPrice() + (cartItem.getProductVariant().getPrice()) * cartItem.getAmount());
+            cart.setTotalCargoPrice(cart.getTotalCargoPrice() + (cartItem.getProductVariant().getCargoPrice()) * cartItem.getAmount());
+            cart.setTotalPrice(
+                    cart.getTotalPrice() +
+                            (cartItem.getProductVariant().getPrice() + cartItem.getProductVariant().getCargoPrice()) * cartItem.getAmount());
+        });
+
+        if (Objects.nonNull(cart.getDiscount())) {
+            cart.setTotalPrice(cart.getTotalPrice() - ((cart.getTotalPrice() * cart.getDiscount().getDiscountPercent()) / 100));
+        }
+
+        cart.setTotalPrice(roundTwoDecimals(cart.getTotalPrice()));
+        cart.setTotalCargoPrice(roundTwoDecimals(cart.getTotalCargoPrice()));
+        return cart;
+    }
+
+    private float roundTwoDecimals(float d) {
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        return Float.parseFloat(twoDForm.format(d));
+    }
+
+    private Cart createCart(User user) {
+        Cart cart = new Cart();
+        cart.setUser(user);
+        return cart;
+    }
 }

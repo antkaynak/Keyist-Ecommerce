@@ -1,14 +1,14 @@
 package com.commerce.backend.validator;
 
-import com.commerce.backend.dto.PasswordForgotDTO;
-import com.commerce.backend.dto.PasswordResetDTO;
-import com.commerce.backend.dto.UserDTO;
+
+import com.commerce.backend.model.request.user.PasswordForgotValidateRequest;
+import com.commerce.backend.model.request.user.PasswordResetRequest;
+import com.commerce.backend.model.request.user.RegisterUserRequest;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class PasswordMatchesValidator
-        implements ConstraintValidator<PasswordMatches, Object> {
+public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, Object> {
 
     @Override
     public void initialize(PasswordMatches constraintAnnotation) {
@@ -16,15 +16,15 @@ public class PasswordMatchesValidator
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
-        if (obj instanceof UserDTO) {
-            UserDTO user = (UserDTO) obj;
-            return user.getPassword().equals(user.getPasswordRepeat());
-        } else if (obj instanceof PasswordResetDTO) {
-            PasswordResetDTO passwordResetDTO = (PasswordResetDTO) obj;
-            return passwordResetDTO.getNewPassword().equals(passwordResetDTO.getNewPasswordConfirm());
-        } else if (obj instanceof PasswordForgotDTO) {
-            PasswordForgotDTO passwordForgotDTO = (PasswordForgotDTO) obj;
-            return passwordForgotDTO.getNewPassword().equals(passwordForgotDTO.getNewPasswordConfirm());
+        if (obj instanceof RegisterUserRequest) {
+            RegisterUserRequest registerUserRequest = (RegisterUserRequest) obj;
+            return registerUserRequest.getPassword().equals(registerUserRequest.getPasswordRepeat());
+        } else if (obj instanceof PasswordResetRequest) {
+            PasswordResetRequest passwordResetRequest = (PasswordResetRequest) obj;
+            return passwordResetRequest.getNewPassword().equals(passwordResetRequest.getNewPasswordConfirm());
+        } else if (obj instanceof PasswordForgotValidateRequest) {
+            PasswordForgotValidateRequest passwordForgotValidateRequest = (PasswordForgotValidateRequest) obj;
+            return passwordForgotValidateRequest.getNewPassword().equals(passwordForgotValidateRequest.getNewPasswordConfirm());
         }
 
         return false;

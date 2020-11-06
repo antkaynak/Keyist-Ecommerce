@@ -1,0 +1,79 @@
+<div class="signin container">
+
+  <div class="title row">
+    <div class="col-md-4">
+      <img src="../../../assets/key.png" alt="login key">
+    </div>
+    <div class="col-md-8">
+      <p>LOGIN</p>
+      <span>Welcome back to Keyist</span>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div *ngFor="let e of (authState | async).errors">
+        <div *ngIf="e.errorEffect == 'SIGN_IN'" class="alert-warning">
+          <div *ngIf="e.error.status === 400">Bad Credentials</div>
+          <div *ngIf="e.error.status === 401">401 Error</div>
+          <div *ngIf="e.error.status === 500 || e.error.status === 0">Internal server error! Please contact our support
+            team.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form row">
+    <div class="col-md-12">
+      <div *ngIf="(authState | async).loading" class="loader"></div>
+      <form [formGroup]="signInForm" (ngSubmit)="onSubmitted()">
+        <div class="form-group">
+          <label for="email">EMAIL</label>
+          <input type="text" id="email" class="form-control" name="email" formControlName="email" [maxlength]="240">
+          <span *ngIf="signInForm.get('email').invalid && signInForm.get('email').touched" class="alert-danger">
+            Please enter a valid email!
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="password">PASSWORD</label>
+          <input type="password" id="password" class="form-control" name="password" formControlName="password"
+            [maxlength]="240">
+          <span *ngIf="signInForm.get('password').invalid && signInForm.get('password').touched">
+            <span *ngIf="signInForm.get('password').errors.required" class="alert-danger">This field is
+              required!</span>
+            <span *ngIf="signInForm.get('password').errors.minlength" class="alert-danger">Minimum password length is
+              6!</span>
+          </span>
+        </div>
+
+        <div class="forgot row">
+          <div class="col-md-12">
+            <a routerLink="/forgot-password">
+              <p>Forgot your password?</p>
+            </a>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <button class="btn btn-info" type="submit"
+              [disabled]="signInForm.invalid || signInForm.pending || (authState | async).loading">Login
+            </button>
+          </div>
+        </div>
+
+        <div class="signup row">
+          <div class="col-md-12">
+            <a routerLink="/signup">
+              <p>Don't have an account? <span>Sign up!</span></p>
+            </a>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

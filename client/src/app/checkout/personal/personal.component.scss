@@ -1,0 +1,43 @@
+.personal {
+  position: relative;
+  top: 70px;
+
+  .info {
+    min-height: 35vh;
+    label {
+      font-size: 14px;
+      color: gray;
+      font-weight: bold;
+    }
+
+    input {
+      border-radius: 10px;
+    }
+  }
+
+  .controls {
+    button,
+    a {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      padding-left: 15px;
+      padding-right: 15px;
+      font-size: 14px;
+      border-radius: 10px;
+    }
+
+    .back {
+      border: 1px solid #17a2b8;
+      color: #17a2b8;
+      font-weight: bold;
+    }
+  }
+
+  @media only screen and (max-width: 767px) {
+    .container-fluid {
+      width: 95% !important;
+    }
+  }
+}

@@ -1,0 +1,82 @@
+<div class="address container">
+  <div class="title">
+    <p>Address</p>
+  </div>
+  <hr>
+  <div *ngIf="innerLoading" class="loader"></div>
+
+  <div *ngIf="!innerLoading">
+    <form [formGroup]="addressForm" (ngSubmit)="onSubmitAddressForm()">
+      <div class="info">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="country">COUNTRY</label>
+              <input type="text" id="country" class="form-control" name="country" formControlName="country"
+                [maxlength]="240">
+              <span *ngIf="addressForm.get('country').invalid && addressForm.get('country').touched">
+                <span *ngIf="addressForm.get('country').errors['required']" class="alert-danger">This field is
+                  required!</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="city">CITY</label>
+              <input type="text" id="city" class="form-control" name="city" formControlName="city" [maxlength]="240">
+              <span *ngIf="addressForm.get('city').invalid && addressForm.get('city').touched">
+                <span *ngIf="addressForm.get('city').errors['required']" class="alert-danger">This field is
+                  required!</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="state">STATE</label>
+              <input type="text" id="state" class="form-control" name="state" formControlName="state" [maxlength]="240">
+              <span *ngIf="addressForm.get('state').invalid && addressForm.get('state').touched">
+                <span class="alert-danger">Please enter a valid state</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="zip">ZIP</label>
+              <input type="text" id="zip" class="form-control" name="zip" formControlName="zip" [maxlength]="6"
+                [minlength]="5">
+              <span *ngIf="addressForm.get('zip').invalid && addressForm.get('zip').touched" class="alert-danger">
+                Please enter a valid zip number!
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="address">ADDRESS</label>
+              <textarea type="text" id="address" class="form-control" name="address" formControlName="address" rows="3">
+              </textarea>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="row controls">
+        <div class="col-md-12">
+          <button class="btn btn-info" type="submit" [disabled]="addressForm.invalid || addressForm.pending">
+            Update
+          </button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>

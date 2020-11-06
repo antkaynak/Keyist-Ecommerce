@@ -1,0 +1,36 @@
+/* Override ng-bootstrap default accordion component*/
+
+.faq {
+  position: relative;
+  top: 150px;
+  min-height: 50vh;
+
+  .title {
+    p {
+      margin: 0;
+      font-weight: bold;
+      color: black;
+    }
+  }
+
+  ngb-accordion ::ng-deep .btn {
+    text-decoration: none !important;
+  }
+
+  ngb-accordion ::ng-deep .panel-title {
+    color: white;
+    font-size: 18px;
+    font-weight: 400;
+    outline: none;
+    text-decoration: none;
+  }
+
+  ngb-accordion ::ng-deep .panel-title:focus,
+  ngb-accordion ::ng-deep .panel-title:hover {
+    text-decoration: none;
+  }
+
+  ngb-accordion ::ng-deep .card-header {
+    background-color: #17a2b8 !important;
+  }
+}

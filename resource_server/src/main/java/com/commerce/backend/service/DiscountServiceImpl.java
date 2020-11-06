@@ -1,51 +1,39 @@
 package com.commerce.backend.service;
 
-import com.commerce.backend.dao.CartRepository;
 import com.commerce.backend.dao.DiscountRepository;
-import com.commerce.backend.dao.UserRepository;
-import com.commerce.backend.model.Cart;
-import com.commerce.backend.model.Discount;
-import com.commerce.backend.model.User;
+import com.commerce.backend.error.exception.InvalidArgumentException;
+import com.commerce.backend.error.exception.ResourceNotFoundException;
+import com.commerce.backend.model.entity.Cart;
+import com.commerce.backend.model.entity.Discount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 
 @Service
 public class DiscountServiceImpl implements DiscountService {
 
     private final DiscountRepository discountRepository;
-    private final UserRepository userRepository;
-    private final PriceService priceService;
-    private final CartRepository cartRepository;
+    private final CartService cartService;
 
     @Autowired
-    public DiscountServiceImpl(DiscountRepository discountRepository, UserRepository userRepository,
-                               PriceService priceService, CartRepository cartRepository) {
+    public DiscountServiceImpl(DiscountRepository discountRepository, CartService cartService) {
         this.discountRepository = discountRepository;
-        this.userRepository = userRepository;
-        this.priceService = priceService;
-        this.cartRepository = cartRepository;
+        this.cartService = cartService;
     }
 
-
     @Override
-    public Cart applyDiscount(Principal principal, String code) {
-        Discount discount = discountRepository.findByCode(code);
-        if (discount == null) {
-            throw new IllegalStateException("Discount code not found");
-        }
-        User user = userRepository.findByEmail(principal.getName());
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
-        } else if (user.getCart() == null) {
-            throw new IllegalArgumentException("Cart not found");
+    public void applyDiscount(String code) {
+        Discount discount = discountRepository.findByCode(code)
+                .orElseThrow(() -> new ResourceNotFoundException("Discount code not found"));
+
+        if (discount.getStatus() != 1) {
+            throw new InvalidArgumentException("Discount code is expired!");
         }
 
-        Cart cart = user.getCart();
-        cart.setCartDiscount(discount);
-        cart = priceService.calculatePrice(cart);
-        cartRepository.save(cart);
-        return cart;
+        Cart cart = cartService.getCart();
+
+        cart.setDiscount(discount);
+        cart = cartService.calculatePrice(cart);
+        cartService.saveCart(cart);
     }
 }

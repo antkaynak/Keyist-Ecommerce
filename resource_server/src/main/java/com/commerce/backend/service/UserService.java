@@ -1,23 +1,31 @@
 package com.commerce.backend.service;
 
 
-import com.commerce.backend.dto.PasswordResetDTO;
-import com.commerce.backend.dto.UserDTO;
-import com.commerce.backend.model.User;
-
-import java.security.Principal;
+import com.commerce.backend.model.entity.User;
+import com.commerce.backend.model.request.user.PasswordResetRequest;
+import com.commerce.backend.model.request.user.RegisterUserRequest;
+import com.commerce.backend.model.request.user.UpdateUserAddressRequest;
+import com.commerce.backend.model.request.user.UpdateUserRequest;
+import com.commerce.backend.model.response.user.UserResponse;
 
 public interface UserService {
+    User register(RegisterUserRequest registerUserRequest);
 
-    /* Public */
-    User register(UserDTO userDTO);
+    UserResponse fetchUser();
 
-    /* Secured */
-    User getUser(Principal principal);
+    User getUser();
 
-    User updateUser(Principal principal, User user);
+    User saveUser(User user);
 
-    void resetPassword(Principal principal, PasswordResetDTO passwordResetDTO);
+    User findByEmail(String email);
 
-    Boolean getVerificationStatus(Principal principal);
+    boolean userExists(String email);
+
+    UserResponse updateUser(UpdateUserRequest updateUserRequest);
+
+    UserResponse updateUserAddress(UpdateUserAddressRequest updateUserAddressRequest);
+
+    void resetPassword(PasswordResetRequest passwordResetRequest);
+
+    Boolean getVerificationStatus();
 }

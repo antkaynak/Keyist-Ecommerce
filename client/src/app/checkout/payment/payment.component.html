@@ -1,0 +1,102 @@
+<div class="payment">
+  <form [formGroup]="paymentForm" (ngSubmit)="onSubmitOrderForm()">
+    <div class="info">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="cardNo">CARD NUMBER</label>
+            <input type="number" id="cardNo" class="form-control" name="cardNo" formControlName="cardNo"
+              [maxlength]="20">
+            <span *ngIf="paymentForm.get('cardNo').invalid && paymentForm.get('cardNo').touched">
+              <span *ngIf="paymentForm.get('cardNo').errors['required']" class="alert-danger">This field is
+                required!</span>
+            </span>
+
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="cardOwner">CARD OWNER</label>
+            <input type="text" id="cardOwner" class="form-control" name="cardOwner" formControlName="cardOwner"
+              [maxlength]="240">
+            <span *ngIf="paymentForm.get('cardOwner').invalid && paymentForm.get('cardOwner').touched">
+              <span *ngIf="paymentForm.get('cardOwner').errors['required']" class="alert-danger">This field is
+                required!</span>
+            </span>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="row" formGroupName="cardExp">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="month">MONTH</label>
+                <select name="month" id="month" class="form-control" [formControlName]="'month'">
+                  <option *ngFor="let number of days" value="{{number}}">{{number}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="year">YEAR</label>
+                <select name="year" id="year" class="form-control" [formControlName]="'year'">
+                  <option *ngFor="let number of months" value="{{number}}">{{number}}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <span *ngIf="paymentForm.get('cardExp').invalid && paymentForm.get('cardExp').touched" class="alert-danger">
+              These fields are required!
+            </span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="cardCCV">CCV</label>
+            <input type="number" id="cardCCV" class="form-control" name="cardCCV" placeholder="***"
+              formControlName="cardCCV" [maxlength]="3">
+            <span *ngIf="paymentForm.get('cardCCV').invalid && paymentForm.get('cardCCV').touched">
+              <span *ngIf="paymentForm.get('cardCCV').errors['required']" class="alert-danger">This field is
+                required!</span>
+            </span>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row warning">
+        <div class="col-md-12">
+          <p>*This is a demo site. Please <b>do not</b> enter your real card information.</p>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-6">
+      </div>
+      <div class="controls col-md-6">
+        <div class="row">
+          <div class="col-md-6">
+            <a routerLink="/checkout/shipping" class="btn back" type="button">
+              Back
+            </a>
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-info" type="submit" [disabled]="paymentForm.invalid || paymentForm.pending">
+              Continue
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>

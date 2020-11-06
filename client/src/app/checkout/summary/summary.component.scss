@@ -1,0 +1,111 @@
+.summary {
+  position: relative;
+  top: 28px;
+  .title {
+    color: black;
+    font-weight: bold;
+    border-bottom: 1px solid #e1e8ee;
+    padding: 10px;
+  }
+  .product {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    max-height: 25vh;
+    overflow: hidden;
+    overflow-y: scroll;
+    border-bottom: 1px solid #e1e8ee;
+    p {
+      margin: 0;
+      font-size: 14px;
+    }
+    img {
+      height: 75px;
+      width: 75px;
+      margin-left: 15px;
+    }
+
+    .color {
+      position: relative;
+      top: 50%;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .details {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .product-name {
+        color: black;
+        font-weight: bold;
+      }
+      .amount {
+        span {
+          color: gray;
+        }
+      }
+
+      .price {
+        color: #17a2b8;
+        font-weight: bold;
+      }
+    }
+  }
+  .pricing {
+    padding: 10px;
+    .label {
+      font-size: 14px;
+      color: #43484d;
+      font-weight: 500;
+    }
+    span {
+      color: black;
+      font-weight: bold;
+      font-size: 14px;
+      margin: 0;
+    }
+    .discount-text {
+      color: #17a2b8;
+    }
+  }
+
+  .total {
+    padding: 10px;
+    border-top: 1px solid #e1e8ee;
+    span {
+      color: black;
+      font-weight: bold;
+      font-size: 16px;
+      margin: 0;
+    }
+  }
+
+  .purchase {
+    padding: 10px;
+    .terms-text {
+      p {
+        cursor: pointer;
+        text-decoration: underline #17a2b8;
+        color: #17a2b8;
+      }
+    }
+
+    button {
+      margin-top: 10px;
+      border-radius: 10px;
+      width: 100%;
+    }
+
+    input {
+      display: inline-block;
+    }
+    label {
+      display: inline;
+      p {
+        margin-left: 5px;
+        display: inline;
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 package com.commerce.backend.dao;
 
-import com.commerce.backend.model.Cart;
+import com.commerce.backend.model.entity.Cart;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

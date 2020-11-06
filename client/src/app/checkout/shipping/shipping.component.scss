@@ -1,0 +1,81 @@
+.shipping {
+  position: relative;
+  top: 70px;
+
+  .info {
+    min-height: 35vh;
+    label {
+      font-size: 14px;
+      color: gray;
+      font-weight: bold;
+    }
+
+    input,
+    textarea {
+      border-radius: 10px;
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    .same,
+    .different {
+      cursor: pointer;
+      div {
+        display: inline-block;
+        border: 1px solid #17a2b8;
+        width: 16px;
+        height: 16px;
+        background-color: white;
+        border-radius: 3px;
+      }
+      span {
+        color: gray;
+        position: relative;
+        bottom: 3px;
+        display: inline;
+        margin: 0;
+        margin-left: 5px;
+        font-size: 14px;
+      }
+
+      &.active {
+        div {
+          background-color: #17a2b8;
+        }
+
+        span {
+          color: black;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .controls {
+    button,
+    a {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      padding-left: 15px;
+      padding-right: 15px;
+      font-size: 14px;
+      border-radius: 10px;
+    }
+
+    .back {
+      border: 1px solid #17a2b8;
+      color: #17a2b8;
+      font-weight: bold;
+    }
+  }
+
+  @media only screen and (max-width: 767px) {
+    .container-fluid {
+      width: 95% !important;
+    }
+  }
+}

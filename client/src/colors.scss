@@ -1,0 +1,28 @@
+$primary: #323232;
+$secondary: #17a2b8;
+$green: #0bc15c;
+$red: #b30000;
+$black: #333333;
+$dark-gray: #666666;
+$light-gray: #999999;
+$border-gray: #e6e6e6;
+$white: #ffffff;
+$yellow: #ffc000;
+$zero: #000000;
+
+$colors: () !default;
+$colors: map_merge(
+  (
+    "primary": $primary,
+    "green": $green,
+    "red": $red,
+    "black": $black,
+    "dark-gray": $dark-gray,
+    "light-gray": $light-gray,
+    "border-gray": $border-gray,
+    "white": $white,
+    "yellow": $yellow,
+    "zero": $zero,
+  ),
+  $colors
+);

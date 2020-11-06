@@ -1,141 +1,101 @@
 package com.commerce.backend.api;
 
-import com.commerce.backend.model.Product;
-import com.commerce.backend.model.ProductCategory;
-import com.commerce.backend.model.ProductDisplay;
-import com.commerce.backend.service.ProductCategoryService;
-import com.commerce.backend.service.ProductDisplayService;
+import com.commerce.backend.error.exception.InvalidArgumentException;
+import com.commerce.backend.model.response.product.ProductDetailsResponse;
+import com.commerce.backend.model.response.product.ProductResponse;
+import com.commerce.backend.model.response.product.ProductVariantResponse;
 import com.commerce.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
-public class ProductController extends ApiController {
-
+public class ProductController extends PublicApiController {
 
     private final ProductService productService;
-    private final ProductDisplayService productDisplayService;
-    private final ProductCategoryService productCategoryService;
 
 
     @Autowired
-    public ProductController(ProductService productService, ProductDisplayService productDisplayService, ProductCategoryService productCategoryService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.productDisplayService = productDisplayService;
-        this.productCategoryService = productCategoryService;
     }
 
 
-    @RequestMapping(value = "/product", method = RequestMethod.GET)
-    public ResponseEntity getAll(@RequestParam("page") Integer page,
-                                 @RequestParam("size") Integer size,
-                                 @RequestParam(value = "sort", required = false) String sort,
-                                 @RequestParam(value = "category", required = false) String category) {
-
-        if (page == null || size == null) {
-            throw new IllegalArgumentException("Page and size parameters are required");
+    @GetMapping(value = "/product")
+    public ResponseEntity<List<ProductVariantResponse>> getAll(@RequestParam("page") Integer page,
+                                                               @RequestParam("size") Integer pageSize,
+                                                               @RequestParam(value = "sort", required = false) String sort,
+                                                               @RequestParam(value = "category", required = false) String category,
+                                                               @RequestParam(value = "minPrice", required = false) Float minPrice,
+                                                               @RequestParam(value = "maxPrice", required = false) Float maxPrice,
+                                                               @RequestParam(value = "color", required = false) String color) {
+        if (Objects.isNull(page) || page < 0) {
+            throw new InvalidArgumentException("Invalid page");
         }
-        PageRequest pageRequest;
-        if (sort != null && !isBlank(sort)) {
-            Sort sortRequest = getSort(sort);
-            if (sortRequest == null) {
-                throw new IllegalArgumentException("Invalid sort parameter");
-            }
-            pageRequest = PageRequest.of(page, size, sortRequest);
-        } else {
-            pageRequest = PageRequest.of(page, size);
+        if (Objects.isNull(pageSize) || pageSize < 0) {
+            throw new InvalidArgumentException("Invalid pageSize");
         }
+        List<ProductVariantResponse> products = productService.getAll(page, pageSize, sort, category, minPrice, maxPrice, color);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
 
-        if (category != null && !isBlank(category)) {
-            ProductCategory productCategory = productCategoryService.findByName(category);
-            if (productCategory == null) {
-                throw new IllegalArgumentException("Invalid category parameter");
-            }
-            List returnList = productDisplayService.findAllByProductCategory(pageRequest, productCategory);
-            return new ResponseEntity<List>(returnList, HttpStatus.OK);
+    @GetMapping(value = "/product/count")
+    public ResponseEntity<Long> getAllCount(@RequestParam(value = "category", required = false) String category,
+                                            @RequestParam(value = "minPrice", required = false) Float minPrice,
+                                            @RequestParam(value = "maxPrice", required = false) Float maxPrice,
+                                            @RequestParam(value = "color", required = false) String color) {
+        Long productCount = productService.getAllCount(category, minPrice, maxPrice, color);
+        return new ResponseEntity<>(productCount, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/product/{url}")
+    public ResponseEntity<ProductDetailsResponse> getByUrl(@PathVariable("url") String url) {
+        if (url.isBlank()) {
+            throw new InvalidArgumentException("Invalid url params");
         }
-
-        List returnList = productDisplayService.findAll(pageRequest);
-        return new ResponseEntity<>(returnList, HttpStatus.OK);
+        ProductDetailsResponse productDetailsResponse = productService.findByUrl(url);
+        return new ResponseEntity<>(productDetailsResponse, HttpStatus.OK);
     }
 
-
-    @RequestMapping(value = "/product", method = RequestMethod.GET, params = "id")
-    public ResponseEntity getFullById(@RequestParam("id") Long id) {
-        Product product = productService.findById(id);
-        if (product == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+    @GetMapping(value = "/product/related/{url}")
+    public ResponseEntity<List<ProductResponse>> getByRelated(@PathVariable("url") String url) {
+        if (url.isBlank()) {
+            throw new InvalidArgumentException("Invalid url params");
         }
-        return new ResponseEntity<Product>(product, HttpStatus.OK);
+        List<ProductResponse> products = productService.getRelatedProducts(url);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/product/related", method = RequestMethod.GET, params = "id")
-    public ResponseEntity getByRelated(@RequestParam("id") Long id) {
-        ProductDisplay productDisplay = productDisplayService.findById(id);
-        if (productDisplay == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<List>(productDisplayService.getRelatedProducts(productDisplay.getProductCategory(), id), HttpStatus.OK);
+    @GetMapping(value = "/product/recent")
+    public ResponseEntity<List<ProductResponse>> getByNewlyAdded() {
+        List<ProductResponse> products = productService.getNewlyAddedProducts();
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/product/recent", method = RequestMethod.GET)
-    public ResponseEntity getByNewlyAdded() {
-        List returnList = productDisplayService.findTop8ByOrderByDateCreatedDesc();
-        return new ResponseEntity<List>(returnList, HttpStatus.OK);
+    @GetMapping(value = "/product/mostselling")
+    public ResponseEntity<List<ProductVariantResponse>> getByMostSelling() {
+        List<ProductVariantResponse> products = productService.getMostSelling();
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/product/mostselling", method = RequestMethod.GET)
-    public ResponseEntity getByMostSelling() {
-        List returnList = productDisplayService.findTop8ByOrderBySellCountDesc();
-        return new ResponseEntity<List>(returnList, HttpStatus.OK);
+    @GetMapping(value = "/product/interested")
+    public ResponseEntity<List<ProductResponse>> getByInterested() {
+        List<ProductResponse> products = productService.getInterested();
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-
-    //TODO rebuild the logic
-    @RequestMapping(value = "/product/interested", method = RequestMethod.GET)
-    public ResponseEntity getByInterested() {
-        List returnList = productDisplayService.findTop8ByOrderBySellCountDesc();
-        return new ResponseEntity<List>(returnList, HttpStatus.OK);
+    @GetMapping(value = "/product/search")
+    public ResponseEntity<List<ProductResponse>> searchProduct(@RequestParam("page") Integer page,
+                                                               @RequestParam("size") Integer size,
+                                                               @RequestParam("keyword") String keyword) {
+        List<ProductResponse> products = productService.searchProductDisplay(keyword, page, size);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
-
-
-    @RequestMapping(value = "/product/search", method = RequestMethod.GET, params = {"page", "size", "keyword"})
-    public ResponseEntity searchProduct(@RequestParam("page") Integer page,
-                                        @RequestParam("size") Integer size,
-                                        @RequestParam("keyword") String keyword) {
-        List returnList = productDisplayService.searchProducts(keyword, page, size);
-        return new ResponseEntity<List>(returnList, HttpStatus.OK);
-    }
-
-    private boolean isBlank(String param) {
-        return param.isEmpty() || param.trim().equals("");
-    }
-
-
-    //A better way to do this is storing sorting options in the database
-    //and sending those options to the client. Later then the client
-    //sends the parameter based upon that.
-    private Sort getSort(String sort) {
-        switch (sort) {
-            case "lowest":
-                return Sort.by(Sort.Direction.ASC, "price");
-            case "highest":
-                return Sort.by(Sort.Direction.DESC, "price");
-            case "name":
-                return Sort.by(Sort.Direction.ASC, "name");
-            default:
-                return null;
-        }
-    }
-
-
 }

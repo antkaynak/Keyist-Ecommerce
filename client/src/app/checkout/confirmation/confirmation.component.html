@@ -1,0 +1,132 @@
+<div class="confirmation">
+
+  <div *ngIf="innerLoading" class="loader"></div>
+
+  <div *ngIf="!innerLoading">
+    <div class="panel">
+      <div class="info row">
+        <div class="col-md-12">
+          <div class="title row">
+            <div class="col-md-10">
+              <p>Shipping Information</p>
+            </div>
+            <div class="col-md-2">
+              <a class="edit" routerLink="/checkout/personal">
+                <p>Edit</p>
+              </a>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <p>Name Surname: <span>{{(orderState | async).personal.shipName}}</span></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <p>Country: <span>{{(orderState | async).shipping.country}}</span></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <p>City: <span>{{(orderState | async).shipping.city}}</span></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <p>Address: <span>{{(orderState | async).shipping.shipAddress}}</span></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <p>Phone: <span>{{(orderState | async).personal.phone}}</span></p>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="!(orderState | async).shipping.billingAddress">
+            <div class="col-md-12">
+              <p class="billing">Use Shipping Address for Billing</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="info secondary row" *ngIf="(orderState | async).shipping.billingAddress">
+        <div class="col-md-12">
+          <div class="title row">
+            <div class="col-md-10">
+              <p>Billing Information</p>
+            </div>
+            <div class="col-md-2">
+              <a class="edit" routerLink="/checkout/personal">
+                <p>Edit</p>
+              </a>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <p>Address: <span>{{(orderState | async).shipping.billingAddress}}</span></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="info lower row">
+        <div class="col-md-12">
+          <div class="title row">
+            <div class="col-md-10">
+              <p>Payment Information</p>
+            </div>
+            <div class="col-md-2">
+              <a class="edit" routerLink="/checkout/payment">
+                <p>Edit</p>
+              </a>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <p>Card Number: <span>
+                  **********
+                  {{(orderState | async).payment.cardNo.toString()
+                  .substr((orderState | async).payment.cardNo.toString().length - 4,(orderState | async).payment.cardNo.toString().length)}}
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <p>Card Owner: <span>{{(orderState | async).payment.cardOwner}}</span></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <p>Expiration Date:
+                <span>{{(orderState | async).payment.cardExp.month}}/{{(orderState | async).payment.cardExp.year}}</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <p>CCV: <span>{{(orderState | async).payment.cardCCV}}</span></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

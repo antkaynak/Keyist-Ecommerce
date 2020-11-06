@@ -1,161 +1,143 @@
 package com.commerce.backend.service;
 
-import com.commerce.backend.dao.EmailResetTokenRepository;
 import com.commerce.backend.dao.PasswordForgotTokenRepository;
-import com.commerce.backend.dao.UserRepository;
 import com.commerce.backend.dao.VerificationTokenRepository;
-import com.commerce.backend.dto.EmailResetDTO;
-import com.commerce.backend.dto.PasswordForgotDTO;
-import com.commerce.backend.event.OnEmailResetRequestEvent;
-import com.commerce.backend.event.OnPasswordForgotRequestEvent;
-import com.commerce.backend.event.OnRegistrationCompleteEvent;
-import com.commerce.backend.model.EmailResetToken;
-import com.commerce.backend.model.PasswordForgotToken;
-import com.commerce.backend.model.User;
-import com.commerce.backend.model.VerificationToken;
+import com.commerce.backend.error.exception.InvalidArgumentException;
+import com.commerce.backend.error.exception.ResourceNotFoundException;
+import com.commerce.backend.model.entity.PasswordForgotToken;
+import com.commerce.backend.model.entity.User;
+import com.commerce.backend.model.entity.VerificationToken;
+import com.commerce.backend.model.event.OnPasswordForgotRequestEvent;
+import com.commerce.backend.model.event.OnRegistrationCompleteEvent;
+import com.commerce.backend.model.request.user.PasswordForgotValidateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
+import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class TokenServiceImpl implements TokenService {
 
+    private static final int EXPIRY_DATE = 60 * 24;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher eventPublisher;
     private final VerificationTokenRepository verificationTokenRepository;
-    private final EmailResetTokenRepository emailResetTokenRepository;
     private final PasswordForgotTokenRepository passwordForgotTokenRepository;
 
     @Autowired
-    public TokenServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, ApplicationEventPublisher eventPublisher, VerificationTokenRepository verificationTokenRepository, EmailResetTokenRepository emailResetTokenRepository, PasswordForgotTokenRepository passwordForgotTokenRepository) {
-        this.userRepository = userRepository;
+    public TokenServiceImpl(UserService userService,
+                            PasswordEncoder passwordEncoder,
+                            ApplicationEventPublisher eventPublisher,
+                            VerificationTokenRepository verificationTokenRepository,
+                            PasswordForgotTokenRepository passwordForgotTokenRepository) {
+        this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.eventPublisher = eventPublisher;
         this.verificationTokenRepository = verificationTokenRepository;
-        this.emailResetTokenRepository = emailResetTokenRepository;
         this.passwordForgotTokenRepository = passwordForgotTokenRepository;
     }
 
     @Override
-    public void createEmailResetToken(Principal principal, EmailResetDTO emailResetDTO, String requestUrl) {
-        User user = getUserFromPrinciple(principal);
-        if (!passwordEncoder.matches(emailResetDTO.getPassword(), user.getPassword())
-                || !emailResetDTO.getNewEmail().equals(emailResetDTO.getNewEmailConfirm())
-                || user.getEmail().equals(emailResetDTO.getNewEmail())) {
-            throw new IllegalArgumentException("Invalid password");
-        }
-
-        if (userRepository.existsByEmail(emailResetDTO.getNewEmail())) {
-            throw new IllegalStateException("Email already exists");
-        }
-        eventPublisher.publishEvent(new OnEmailResetRequestEvent(user, requestUrl, emailResetDTO.getNewEmail()));
+    public void createEmailConfirmToken(User user) {
+        String token = UUID.randomUUID().toString();
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken.setToken(token);
+        verificationToken.setUser(user);
+        verificationToken.setExpiryDate(calculateExpiryDate());
+        verificationTokenRepository.save(verificationToken);
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, token));
     }
 
     @Override
-    public void createEmailConfirmToken(User user, String requestUrl) {
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, requestUrl));
-    }
-
-    @Override
-    public void createPasswordResetToken(String email, String requestUrl) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            return; //returning okay so we won't expose which email we have in the db
+    public void createPasswordResetToken(String email) {
+        User user = userService.findByEmail(email);
+        if (Objects.isNull(user)) {
+            return;
         }
 
-        eventPublisher.publishEvent(new OnPasswordForgotRequestEvent(user, requestUrl));
+        PasswordForgotToken passwordForgotToken = passwordForgotTokenRepository.findByUser(user)
+                .orElse(null);
+        if (Objects.isNull(passwordForgotToken)) {
+            passwordForgotToken = new PasswordForgotToken();
+            passwordForgotToken.setUser(user);
+        }
+
+        String token = UUID.randomUUID().toString();
+        passwordForgotToken.setToken(token);
+        passwordForgotToken.setExpiryDate(calculateExpiryDate());
+        passwordForgotTokenRepository.save(passwordForgotToken);
+
+        eventPublisher.publishEvent(new OnPasswordForgotRequestEvent(user, token));
     }
 
     @Override
     public void validateEmail(String token) {
-        VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
-        if (verificationToken == null) {
-            throw new IllegalArgumentException("Null verification token");
-        }
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token)
+                .orElseThrow(() -> new ResourceNotFoundException("Null verification token"));
+
 
         User user = verificationToken.getUser();
-        Calendar cal = Calendar.getInstance();
-        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-            throw new IllegalArgumentException("Token is expired");
+
+        if (Objects.isNull(user)) {
+            throw new ResourceNotFoundException("User not found");
         }
+
+        checkTokenExpire(verificationToken.getExpiryDate());
 
         user.setEmailVerified(1);
         verificationTokenRepository.delete(verificationToken);
-        userRepository.save(user);
-    }
-
-    @Override
-    public void validateEmailReset(String token) {
-        EmailResetToken emailResetToken = emailResetTokenRepository.findByToken(token);
-        if (emailResetToken == null) {
-            throw new IllegalArgumentException("Null emailReset token");
-        }
-
-        User user = emailResetToken.getUser();
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
-        }
-        Calendar cal = Calendar.getInstance();
-        if ((emailResetToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-            throw new IllegalArgumentException("Token is expired");
-        }
-
-        user.setEmailVerified(1);
-        user.setEmail(emailResetToken.getEmail());
-        emailResetTokenRepository.delete(emailResetToken);
-        userRepository.save(user);
+        userService.saveUser(user);
     }
 
     @Override
     public void validateForgotPasswordConfirm(String token) {
-        PasswordForgotToken passwordForgotToken = passwordForgotTokenRepository.findByToken(token);
-        if (passwordForgotToken == null) {
-            throw new IllegalArgumentException("Token not found");
-        }
+        PasswordForgotToken passwordForgotToken = passwordForgotTokenRepository.findByToken(token)
+                .orElseThrow(() -> new ResourceNotFoundException("Token not found"));
 
-        Calendar cal = Calendar.getInstance();
-        if ((passwordForgotToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-            throw new IllegalArgumentException("Token is expired");
-        }
-
+        checkTokenExpire(passwordForgotToken.getExpiryDate());
     }
 
     @Override
-    public void validateForgotPassword(PasswordForgotDTO passwordForgotDTO) {
-        PasswordForgotToken passwordForgotToken = passwordForgotTokenRepository.findByToken(passwordForgotDTO.getToken());
-        if (passwordForgotToken == null) {
-            throw new IllegalArgumentException("Token not found");
-        }
+    public void validateForgotPassword(PasswordForgotValidateRequest passwordForgotValidateRequest) {
+        PasswordForgotToken passwordForgotToken = passwordForgotTokenRepository.findByToken(passwordForgotValidateRequest.getToken())
+                .orElseThrow(() -> new ResourceNotFoundException("Token not found"));
 
         User user = passwordForgotToken.getUser();
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
+
+        if (Objects.isNull(user)) {
+            throw new ResourceNotFoundException("User not found");
         }
 
-        if (passwordEncoder.matches(passwordForgotDTO.getNewPassword(), user.getPassword())) {
-            return; //If the new password is the one user already has just return ok.
+        checkTokenExpire(passwordForgotToken.getExpiryDate());
+
+        if (passwordEncoder.matches(passwordForgotValidateRequest.getNewPassword(), user.getPassword())) {
+            return;
         }
 
-        user.setPassword(passwordEncoder.encode(passwordForgotDTO.getNewPassword()));
-        userRepository.save(user);
+        user.setPassword(passwordEncoder.encode(passwordForgotValidateRequest.getNewPassword()));
+        userService.saveUser(user);
         passwordForgotTokenRepository.delete(passwordForgotToken);
-
     }
 
-    private User getUserFromPrinciple(Principal principal) {
-        if (principal == null || principal.getName() == null) {
-            throw new IllegalArgumentException("Invalid access");
+    private Date calculateExpiryDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Timestamp(cal.getTime().getTime()));
+        cal.add(Calendar.MINUTE, TokenServiceImpl.EXPIRY_DATE);
+        return new Date(cal.getTime().getTime());
+    }
+
+    private void checkTokenExpire(Date date) {
+        if ((date.getTime() - Calendar.getInstance().getTime().getTime()) <= 0) {
+            throw new InvalidArgumentException("Token is expired");
         }
-        User user = userRepository.findByEmail(principal.getName());
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
-        }
-        return user;
+
     }
 }

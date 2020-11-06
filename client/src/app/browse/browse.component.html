@@ -1,0 +1,110 @@
+<div class="browse container">
+  <div class="row">
+    <div class="filters col-md-3">
+      <div class="categories">
+        <p>Categories</p>
+        <p *ngIf="selectedCategory !== 'any'" class="remove" (click)="clearCategory()">remove</p>
+        <div class="category {{selectedCategory === c.category.name ? 'active': ''}}"
+          *ngFor="let c of (browseState | async).categories" (click)="selectCategory(c.category.name)">
+          {{c.category.name}}
+        </div>
+        <div *ngFor="let e of (browseState | async).errors">
+          <div *ngIf="e.errorEffect == 'FETCH_CATEGORY'" class="alert-warning">
+            <div *ngIf="e.error.status === 400 || e.error.status === 401">Problem loading categories...</div>
+            <div *ngIf="e.error.status === 500 || e.error.status === 0 ">Internal server error! Please contact our
+              support team.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="price">
+        <p>Price</p>
+        <p *ngIf="minPrice !== '0' || maxPrice !== '0'" class="remove" (click)="clearPrice()">remove</p>
+        <div class="row">
+          <div class="min col-md-4">
+            <p>Min Price</p>
+            <input type="number" (change)="selectMin($event.target.value)" value="{{minPrice !== '0' ? minPrice : ''}}">
+          </div>
+          <div class="max col-md-4">
+            <p>Max Price</p>
+            <input type="number" (change)="selectMax($event.target.value)" value="{{maxPrice !== '0' ? maxPrice : ''}}">
+          </div>
+          <div class="col-md-2"></div>
+        </div>
+      </div>
+      <div class="color">
+        <p>Color</p>
+        <p *ngIf="selectedColor !== 'any'" class="remove" (click)="clearColor()">remove</p>
+        <div>
+          <div *ngFor="let color of (browseState | async).colors" [ngStyle]="{'background-color': color.color.hex}"
+            (click)="selectColor(color.color.name)" class="{{selectedColor === color.color.name ? 'active' : ''}}">
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="browse-content col-md-9">
+      <div *ngIf="(browseState | async).loading" class="loader"></div>
+      <div class="row">
+        <div class="col-md-6">
+          <p class="product-count">{{(browseState | async).productsCount}} Product Found</p>
+        </div>
+        <div class="col-md-6">
+          <div class="sort">
+            <select name="sortBy" id="sortBy" (change)="selectSort($event.target.value)">
+              <option *ngFor="let s of sortBy" [value]="s.value" [selected]="s.value === selectedSort ? true : false">
+                {{s.display}}</option>
+            </select>
+          </div>
+
+
+          <div *ngFor="let e of (browseState | async).errors">
+            <div *ngIf="e.errorEffect == 'FETCH_PRODUCTS' || e.errorEffect == 'FETCH_PRODUCTS_APPEND'"
+              class="alert-warning col-md-12">
+              <div *ngIf="e.error.status === 400 || e.error.status === 401 ">Problem loading products...</div>
+              <div *ngIf="e.error.status === 500 || e.error.status === 0 ">Internal server error! Please contact our
+                support
+                team.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="product row">
+        <div class="product-card col-lg-3 col-md-6 col-12" *ngFor="let product of ( browseState | async ).products">
+          <a routerLink="/detail/{{product.url}}/{{product.productVariant.id}}">
+            <img src="{{product.productVariant.thumb}}" alt="product image"
+              [ngClass]="{'gray': (browseState | async).loading}">
+            <hr>
+            <p class="product-name">{{product.name}}</p>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="product-color" [ngStyle]="{'background-color': product.productVariant.color.hex}"></div>
+              </div>
+              <div class="col-md-6">
+                <p>{{product.productVariant.price}} €</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="product-not-found"
+          *ngIf="(browseState | async).productsCount === 0 && !(browseState | async).loading">
+          <h1>:(</h1>
+          <h3>Sorry, no product found</h3>
+          <p>Try searching again!</p>
+        </div>
+      </div>
+
+
+      <div *ngIf="!canFetch" class="row">
+        <div class="col-md-12 col-12">
+          <hr>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

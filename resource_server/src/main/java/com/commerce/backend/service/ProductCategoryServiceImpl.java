@@ -1,36 +1,39 @@
 package com.commerce.backend.service;
 
-import com.commerce.backend.dao.ProductCategoryRepository;
-import com.commerce.backend.model.ProductCategory;
+import com.commerce.backend.converter.category.ProductCategoryResponseConverter;
+import com.commerce.backend.error.exception.ResourceNotFoundException;
+import com.commerce.backend.model.entity.ProductCategory;
+import com.commerce.backend.model.response.category.ProductCategoryResponse;
+import com.commerce.backend.service.cache.ProductCategoryCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 @Service
-@CacheConfig(cacheNames = "product_category")
 public class ProductCategoryServiceImpl implements ProductCategoryService {
 
-
-    private final ProductCategoryRepository productCategoryRepository;
+    private final ProductCategoryCacheService productCategoryCacheService;
+    private final ProductCategoryResponseConverter productCategoryResponseConverter;
 
     @Autowired
-    public ProductCategoryServiceImpl(ProductCategoryRepository productCategoryRepository) {
-        this.productCategoryRepository = productCategoryRepository;
+    public ProductCategoryServiceImpl(ProductCategoryCacheService productCategoryCacheService,
+                                      ProductCategoryResponseConverter productCategoryResponseConverter) {
+        this.productCategoryCacheService = productCategoryCacheService;
+        this.productCategoryResponseConverter = productCategoryResponseConverter;
     }
 
-    @Override
-    @Cacheable(key = "#category")
-    public ProductCategory findByName(String category) {
-        return productCategoryRepository.findByName(category);
-    }
 
     @Override
-    @Cacheable(key = "#root.methodName")
-    public List<ProductCategory> findAllByOrderByName() {
-        return productCategoryRepository.findAllByOrderByName();
+    public List<ProductCategoryResponse> findAllByOrderByName() {
+        List<ProductCategory> productCategories = productCategoryCacheService.findAllByOrderByName();
+        if (productCategories.isEmpty()) {
+            throw new ResourceNotFoundException("Could not find product categories");
+        }
+        return productCategories
+                .stream()
+                .map(productCategoryResponseConverter)
+                .collect(Collectors.toList());
     }
 }

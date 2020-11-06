@@ -1,0 +1,23 @@
+<div class="newly-added container" *ngIf="!(showcaseState | async).errors.includes('FETCH_NEWLY_ADDED')">
+  <div class="col-md-12">
+    <h3 class="title">New Products</h3>
+  </div>
+  <div *ngIf="(showcaseState | async).loading.includes('FETCH_NEWLY_ADDED')" class="loader"></div>
+  <div *ngIf="!(showcaseState | async).loading.includes('FETCH_NEWLY_ADDED')" class="row new-cards">
+    <div class="new-card col-lg-3 col-md-6 col-12" *ngFor="let n of (showcaseState | async).newlyAdded">
+      <a routerLink="/detail/{{n.url}}/0">
+        <img src="{{n.productVariants[0].thumb}}" alt="{{n.name}}">
+        <hr>
+        <p class="product-name">{{n.name}}</p>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="product-color" [ngStyle]="{'background-color': n.productVariants[0].color.hex}"></div>
+          </div>
+          <div class="col-md-6">
+            <p>{{n.productVariants[0].price}} €</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

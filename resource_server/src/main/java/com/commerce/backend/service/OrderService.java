@@ -1,14 +1,14 @@
 package com.commerce.backend.service;
 
-import com.commerce.backend.model.Order;
+import com.commerce.backend.model.request.order.PostOrderRequest;
+import com.commerce.backend.model.response.order.OrderResponse;
 
-import java.security.Principal;
 import java.util.List;
 
 public interface OrderService {
-    Integer getAllOrdersCount(Principal principal);
+    Integer getAllOrdersCount();
 
-    List<Order> getAllOrders(Principal principal, Integer page, Integer pageSize);
+    List<OrderResponse> getAllOrders(Integer page, Integer pageSize);
 
-    Order postOrder(Principal principal, Order order);
+    OrderResponse postOrder(PostOrderRequest postOrderRequest);
 }

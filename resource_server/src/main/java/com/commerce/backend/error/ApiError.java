@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 class ApiError {
+    private static final long serialVersionUID = 6877490277661133451L;
 
     private HttpStatus status;
     private Integer error;
@@ -31,5 +32,4 @@ class ApiError {
         this.message = message;
         this.error = error;
     }
-
 }

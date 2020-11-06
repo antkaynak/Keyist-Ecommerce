@@ -1,18 +1,29 @@
 package com.commerce.backend.service;
 
-import com.commerce.backend.model.Cart;
+import com.commerce.backend.model.entity.Cart;
+import com.commerce.backend.model.request.cart.ConfirmCartRequest;
+import com.commerce.backend.model.response.cart.CartResponse;
 
-import java.security.Principal;
 
 public interface CartService {
-    Cart addToCart(Principal principal, Long id, Integer amount);
+    CartResponse addToCart(Long id, Integer amount);
 
-    Cart fetchCart(Principal principal);
+    CartResponse incrementCartItem(Long cartItemId, Integer amount);
 
-    Cart removeFromCart(Principal principal, Long id);
+    CartResponse decrementCartItem(Long cartItemId, Integer amount);
 
-    Boolean confirmCart(Principal principal, Cart cart);
+    CartResponse fetchCart();
 
-    void emptyCart(Principal principal);
+    CartResponse removeFromCart(Long id);
+
+    boolean confirmCart(ConfirmCartRequest confirmCartRequest);
+
+    Cart getCart();
+
+    void saveCart(Cart cart);
+
+    void emptyCart();
+
+    Cart calculatePrice(Cart cart);
 
 }

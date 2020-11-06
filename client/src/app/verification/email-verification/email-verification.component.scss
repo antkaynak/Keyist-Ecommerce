@@ -1,0 +1,31 @@
+.email-verification {
+  position: relative;
+  top: 250px;
+  min-height: 50vh;
+  span {
+    font-size: 10em;
+  }
+  p {
+    margin-top: 10px;
+    text-align: center;
+  }
+  .home,
+  .products {
+    margin: auto;
+    display: block;
+    width: 50%;
+  }
+  .home {
+    margin-top: 50px;
+    background-color: #17a2b8;
+    color: white;
+    border-radius: 10px;
+  }
+  .products {
+    margin-top: 10px;
+    background-color: white;
+    color: #17a2b8;
+    border: 1px solid #17a2b8;
+    border-radius: 10px;
+  }
+}

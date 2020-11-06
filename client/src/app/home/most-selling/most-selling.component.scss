@@ -1,0 +1,93 @@
+.most-selling {
+  position: relative;
+  top: 150px;
+  min-height: 15vh;
+  .title {
+    font-weight: bold;
+    color: black;
+    font-size: 18px;
+  }
+  .most-cards {
+    scroll-behavior: smooth;
+    overflow: auto;
+    white-space: nowrap;
+    text-align: center;
+    padding: 10px;
+    .most-card {
+      display: inline-block;
+      padding: 15px;
+      .row {
+        padding-left: 10px;
+        margin: 0;
+        margin-top: 5px;
+        p {
+          font-weight: bold;
+        }
+      }
+      hr {
+        width: 75%;
+        margin-bottom: 5px;
+      }
+      p {
+        margin-bottom: 0;
+        font-size: 12px;
+      }
+      a {
+        color: #17a2b8;
+        text-decoration: none;
+      }
+      img {
+        width: 180px;
+        height: 180px;
+      }
+      .product-color {
+        position: relative;
+        top: 5px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .product-name {
+        color: #292c2f;
+      }
+    }
+
+    .most-card:hover {
+      border-radius: 10px;
+      -webkit-box-shadow: 0px 3px 5px 6px rgba(57, 41, 41, 0.1);
+      -moz-box-shadow: 0px 3px 5px 6px rgba(57, 41, 41, 0.1);
+      box-shadow: 0px 3px 5px 6px rgba(57, 41, 41, 0.1);
+    }
+  }
+
+  .scroll-left {
+    background-image: url("../../../assets/left.svg");
+    cursor: pointer;
+    z-index: 9999;
+    position: absolute;
+    top: 40%;
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    font-size: 34px;
+  }
+
+  .scroll-right {
+    background-image: url("../../../assets/right.svg");
+    cursor: pointer;
+    z-index: 9999;
+    position: absolute;
+    top: 40%;
+    right: 0;
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    font-size: 34px;
+  }
+
+  p {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}

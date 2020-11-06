@@ -1,13 +1,15 @@
 package com.commerce.backend.dao;
 
-import com.commerce.backend.model.PasswordForgotToken;
-import com.commerce.backend.model.User;
+import com.commerce.backend.model.entity.PasswordForgotToken;
+import com.commerce.backend.model.entity.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface PasswordForgotTokenRepository extends CrudRepository<PasswordForgotToken, Long> {
-    PasswordForgotToken findByToken(String token);
+    Optional<PasswordForgotToken> findByToken(String token);
 
-    PasswordForgotToken findByUser(User user);
+    Optional<PasswordForgotToken> findByUser(User user);
 }

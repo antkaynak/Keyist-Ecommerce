@@ -1,0 +1,188 @@
+<div class="signup container">
+
+  <div class="title row">
+    <div class="col-md-4">
+      <img src="../../../assets/key.png" alt="login key">
+    </div>
+    <div class="col-md-8">
+      <p>SIGN UP</p>
+      <span>Welcome back to Keyist</span>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div *ngFor="let e of (authState | async).errors">
+        <div *ngIf="e.errorEffect == 'SIGN_IN'" class="alert-warning">
+          <div *ngIf="e.error.status === 400">Bad Credentials</div>
+          <div *ngIf="e.error.status === 401">401 Error</div>
+          <div *ngIf="e.error.status === 500 || e.error.status === 0">Internal server error! Please contact our support
+            team.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form row">
+    <div class="col-md-12">
+      <div *ngIf="(authState | async).loading" class="loader"></div>
+      <form [formGroup]="signUpForm" (ngSubmit)="onSubmitted()">
+        <div class="form-group">
+          <label for="email">EMAIL</label>
+          <input type="text" id="email" class="form-control" name="email" formControlName="email" [maxlength]="240">
+          <span *ngIf="signUpForm.get('email').invalid && signUpForm.get('email').touched" class="alert-danger">
+            Please enter a valid email!
+          </span>
+        </div>
+
+        <div formGroupName="passwordGroup">
+          <div class="form-group">
+            <label for="newPassword">PASSWORD</label>
+            <input type="password" id="newPassword" class="form-control" name="newPassword"
+              formControlName="newPassword" [maxlength]="240">
+            <span
+              *ngIf="signUpForm.get('passwordGroup.newPassword').invalid && signUpForm.get('passwordGroup.newPassword').touched">
+              <span *ngIf="signUpForm.get('passwordGroup.newPassword').errors['required']" class="alert-danger">This
+                field is required!</span>
+              <span *ngIf="signUpForm.get('passwordGroup.newPassword').errors['minlength']" class="alert-danger">The
+                password should at least be 6 digits!</span>
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="newPasswordConfirm">PASSWORD REPEAT</label>
+            <input type="password" id="newPasswordConfirm" class="form-control" name="newPasswordConfirm"
+              formControlName="newPasswordConfirm" [maxlength]="240">
+            <span
+              *ngIf="signUpForm.get('passwordGroup.newPasswordConfirm').invalid && signUpForm.get('passwordGroup.newPasswordConfirm').touched">
+              <span *ngIf="signUpForm.get('passwordGroup.newPasswordConfirm').errors['required']"
+                class="alert-danger">This field is required!</span>
+
+            </span>
+            <span *ngIf="signUpForm.get('passwordGroup').invalid && signUpForm.get('passwordGroup').touched">
+              <span
+                *ngIf="signUpForm.get('passwordGroup').errors != null && signUpForm.get('passwordGroup').errors['noMatch']"
+                class="alert-danger">Your passwords must match!</span>
+            </span>
+
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-12">
+            <button class="btn btn-info" type="submit"
+              [disabled]="signUpForm.invalid || signUpForm.pending || (authState | async).loading">Register
+            </button>
+          </div>
+        </div>
+
+        <div class="signin row">
+          <div class="col-md-12">
+            <a routerLink="/login">
+              <p>Already have an account? <span>Login!</span></p>
+            </a>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="container">
+  <div class="row mt-5">
+    <div class="col-md-6">
+      <div *ngFor="let e of (authState | async).errors">
+        <div *ngIf="e.errorEffect == 'SIGN_UP'" class="alert-warning">
+          <div *ngIf="e.error.status === 400">Bad Credentials</div>
+          <div *ngIf="e.error.status === 401">401 Error</div>
+          <div *ngIf="e.error.status === 409">An account with this email already exists!</div>
+          <div *ngIf="e.error.status === 500 || e.error.status === 0">Internal server error! Please contact our support
+            team.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 pb-4">
+      <div *ngIf="(authState | async).loading" class="loader"></div>
+      <div class="title">Register</div>
+      <form [formGroup]="signUpForm" (ngSubmit)="onSubmitted()">
+        <div class="form-group">
+          <label for="email"></label>
+          <input type="text"
+                 id="email"
+                 class="form-control"
+                 name="email"
+                 placeholder="Email"
+                 formControlName="email"
+                 [maxlength]="240"
+          >
+          <span *ngIf="signUpForm.get('email').invalid && signUpForm.get('email').touched" class="alert-danger">
+                  Please enter a valid email!
+                </span>
+        </div>
+
+        <div formGroupName="passwordGroup">
+          <div class="form-group">
+            <label for="newPassword"></label>
+            <input type="password"
+                   id="newPassword"
+                   class="form-control"
+                   name="newPassword"
+                   placeholder="Password"
+                   formControlName="newPassword"
+                   [maxlength]="240"
+            >
+            <span
+              *ngIf="signUpForm.get('passwordGroup.newPassword').invalid && signUpForm.get('passwordGroup.newPassword').touched">
+                    <span *ngIf="signUpForm.get('passwordGroup.newPassword').errors['required']" class="alert-danger">This field is required!</span>
+                    <span *ngIf="signUpForm.get('passwordGroup.newPassword').errors['minlength']" class="alert-danger">The password should at least be 6 digits!</span>
+                  </span>
+          </div>
+          <div class="form-group">
+            <label for="newPasswordConfirm"></label>
+            <input type="password"
+                   id="newPasswordConfirm"
+                   class="form-control"
+                   name="newPasswordConfirm"
+                   placeholder="Password Repeat"
+                   formControlName="newPasswordConfirm"
+                   [maxlength]="240"
+            >
+            <span
+              *ngIf="signUpForm.get('passwordGroup.newPasswordConfirm').invalid && signUpForm.get('passwordGroup.newPasswordConfirm').touched">
+                    <span *ngIf="signUpForm.get('passwordGroup.newPasswordConfirm').errors['required']"
+                          class="alert-danger">This field is required!</span>
+
+                  </span>
+            <span *ngIf="signUpForm.get('passwordGroup').invalid && signUpForm.get('passwordGroup').touched">
+            <span
+              *ngIf="signUpForm.get('passwordGroup').errors != null && signUpForm.get('passwordGroup').errors['noMatch']"
+              class="alert-danger">Your passwords must match!</span>
+          </span>
+
+          </div>
+        </div>
+
+        <div class="row pt-2">
+          <div class="col-md-6">
+            <a routerLink="/login" style="color:gray; font-size: 0.80em">Already have an account? Login!</a>
+          </div>
+          <div class="col-md-6" style="text-align: right">
+            <button class="btn btn-info w-75" type="submit"
+                    [disabled]="signUpForm.invalid || signUpForm.pending || (authState | async).loading">Register
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-md-6 pb-4">
+      <img src="../../../assets/key.png" alt="login key">
+    </div>
+  </div>
+</div> -->

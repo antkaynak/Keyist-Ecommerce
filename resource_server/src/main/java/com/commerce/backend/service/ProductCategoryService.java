@@ -1,11 +1,9 @@
 package com.commerce.backend.service;
 
-import com.commerce.backend.model.ProductCategory;
+import com.commerce.backend.model.response.category.ProductCategoryResponse;
 
 import java.util.List;
 
 public interface ProductCategoryService {
-    ProductCategory findByName(String category);
-
-    List<ProductCategory> findAllByOrderByName();
+    List<ProductCategoryResponse> findAllByOrderByName();
 }

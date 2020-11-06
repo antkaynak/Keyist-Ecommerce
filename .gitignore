@@ -3,6 +3,9 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
+*.DS_Store
+/.DS_Store
+.DS_Store
 
 # compiled output
 /frontend/dist

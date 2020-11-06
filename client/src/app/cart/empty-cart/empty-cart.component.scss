@@ -1,0 +1,32 @@
+.empty-cart {
+  position: relative;
+  top: 130px;
+  min-height: 60vh;
+  span {
+    font-size: 10em;
+    margin-right: 20px;
+  }
+  p {
+    margin-top: 10px;
+    text-align: center;
+  }
+  .home,
+  .browse {
+    margin: auto;
+    display: block;
+    width: 50%;
+  }
+  .home {
+    margin-top: 50px;
+    background-color: #17a2b8;
+    color: white;
+    border-radius: 10px;
+  }
+  .browse {
+    margin-top: 10px;
+    background-color: white;
+    color: #17a2b8;
+    border: 1px solid #17a2b8;
+    border-radius: 10px;
+  }
+}

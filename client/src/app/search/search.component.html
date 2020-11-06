@@ -1,0 +1,31 @@
+<div class="search container">
+  <div class="title">
+    <h3>Search Results</h3>
+    <p><span class="highlight">{{products.length}}</span> result<span *ngIf="products.length > 1">s</span> found for the
+      search for
+      <span class="highlight">{{keyword}}</span>
+    </p>
+  </div>
+
+  <div class="col-12 col-sm-6 col-md-12">
+    <div *ngFor="let product of products" class="search-result row">
+      <div class="search-card col-md-3">
+        <a routerLink="/detail/{{product.url}}/0">
+          <img src="{{product.productVariants[0].thumb}}" alt="{{product.name}}">
+          <hr>
+          <p class="product-name">{{product.name}}</p>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="product-color" [ngStyle]="{'background-color': product.productVariants[0].color.hex}"></div>
+            </div>
+            <div class="col-md-6">
+              <p>${{product.productVariants[0].price}}</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <hr *ngIf="!canFetch">
+</div>

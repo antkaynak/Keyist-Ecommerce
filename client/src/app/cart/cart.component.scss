@@ -1,0 +1,241 @@
+.display {
+  width: 70%;
+  min-height: 50vh;
+  position: relative;
+  top: 150px;
+  .cart-info {
+    .title {
+      border-bottom: 1px solid #e1e8ee;
+      padding: 10px;
+      p {
+        font-size: 18px;
+        margin: 0;
+        font-weight: bold;
+        color: black;
+      }
+    }
+
+    .item {
+      padding: 20px;
+      border-bottom: 1px solid #e1e8ee;
+
+      .product-image {
+        padding: 0;
+
+        img {
+          width: 100px;
+          height: 100px;
+          margin-left: 15px;
+          cursor: pointer;
+        }
+
+        .color {
+          position: relative;
+          top: 50%;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+        }
+      }
+
+      .description {
+        text-align: center;
+        cursor: pointer;
+        span {
+          position: relative;
+          top: 40%;
+          font-size: 14px;
+          color: #43484d;
+          font-weight: 400;
+          word-break: break-word;
+        }
+      }
+
+      .quantity {
+        font-size: 14px;
+        position: relative;
+        top: 40%;
+      }
+
+      .quantity {
+        .loader {
+          font-size: 6px;
+          top: 40%;
+          left: 25%;
+        }
+        div {
+          position: relative;
+          top: 40%;
+          span {
+            padding-left: 8px;
+            padding-right: 8px;
+            -webkit-appearance: none;
+            border: none;
+            text-align: center;
+            width: 32px;
+            font-size: 14px;
+            color: #43484d;
+            font-weight: 300;
+          }
+
+          button.minus-btn,
+          button.plus-btn {
+            width: 25%;
+            height: 30px;
+            background-color: #e1e8ee;
+            border-radius: 10px;
+            border: none;
+          }
+
+          .minus-btn img {
+            margin-bottom: 3px;
+          }
+
+          .plus-btn img {
+            margin-top: 2px;
+          }
+
+          button:focus,
+          input:focus {
+            outline: 0;
+          }
+        }
+      }
+
+      .item-price {
+        span {
+          white-space: nowrap;
+          position: relative;
+          top: 40%;
+          font-size: 14px;
+          color: #17a2b8;
+          font-weight: bold;
+        }
+      }
+
+      .delete {
+        .loader {
+          font-size: 6px;
+          top: 40%;
+        }
+        span {
+          padding: 10px;
+          position: relative;
+          top: 40%;
+          cursor: pointer;
+          width: 18px;
+          height: 17px;
+          background: url("../../assets/delete-icn.svg") no-repeat center;
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+
+  .summary {
+    position: relative;
+    top: 28px;
+    .title {
+      color: black;
+      font-weight: bold;
+      border-bottom: 1px solid #e1e8ee;
+      padding: 10px;
+    }
+    .pricing {
+      padding: 10px;
+      .label {
+        font-size: 14px;
+        color: #43484d;
+        font-weight: 500;
+      }
+      span {
+        color: black;
+        font-weight: bold;
+        font-size: 14px;
+        margin: 0;
+      }
+      .discount-add-text,
+      .discount-add-text span {
+        cursor: pointer;
+        color: #17a2b8;
+        font-size: 14px;
+        span {
+          font-size: 18px;
+          position: relative;
+          top: 2px;
+        }
+      }
+      .discount-text {
+        color: #17a2b8;
+      }
+    }
+
+    .total {
+      padding: 10px;
+      border-top: 1px solid #e1e8ee;
+      span {
+        color: black;
+        font-weight: bold;
+        font-size: 16px;
+        margin: 0;
+      }
+    }
+
+    .checkout {
+      button {
+        width: 100%;
+        background-color: #17a2b8;
+        color: white;
+        border-radius: 10px;
+      }
+
+      .discount {
+        padding: 20px;
+        p {
+          font-size: 14px;
+          font-weight: bold;
+        }
+        input {
+          border-radius: 10px;
+        }
+      }
+
+      .apply-code {
+        background-color: white;
+        color: #17a2b8;
+        border: 1px solid #17a2b8;
+        border-radius: 10px;
+      }
+    }
+  }
+
+  @media (max-width: 800px) {
+    .container-fluid {
+      width: 95% !important;
+    }
+
+    .shopping-cart {
+      width: 100%;
+      height: auto;
+      overflow: hidden;
+    }
+
+    .item {
+      height: auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .image img {
+      width: 50%;
+    }
+
+    .image,
+    .quantity,
+    .description {
+      width: 100%;
+      text-align: center;
+      margin: 6px 0;
+    }
+  }
+}

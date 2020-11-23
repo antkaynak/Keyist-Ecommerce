@@ -1,12 +1,13 @@
 # Keyist Ecommerce
 
-Demo is now available at https://keyist.tech
-<br>
-Note that demo site might be slower than expected as it has low resources since it is under free hosting :)
+Demo is now available at https://keyist.tech 🔑
+
 
 ![alt text](https://github.com/antkaynak/Keyist-Ecommerce/blob/master/screen_shots/detail.png)
 
 ![alt text](https://github.com/antkaynak/Keyist-Ecommerce/blob/master/screen_shots/cart.png)
+
+![alt text](https://github.com/antkaynak/Keyist-Ecommerce/blob/master/screen_shots/browse.png)
 
 ![alt text](https://github.com/antkaynak/Keyist-Ecommerce/blob/master/screen_shots/orders.png)
 
@@ -17,6 +18,8 @@ This project is a simple e-commerce website powered by Angular 10 on the fronten
 For the full stack list please visit "Built With" section below.
 
 Ecommerce is a complex business. It involves many edge cases and a solid system architecture. This project is simply a demo demonstrating basic features which is only the tip of an iceberg. This project might ( and certainly does ) have bugs, vulnerabilities or some other types of issues. So, contributions are always welcome :)
+
+The demo is under free hosting, so it may require a bit of a patience :)
 
 ## Updated
 This project is upgraded to Java 11, Spring Boot 2.3.3 and Angular 10+ and some new features added!
@@ -89,6 +92,10 @@ Keep in mind that both authorization and backend server's pom.xml is configured 
 
 ```
 
+This project uses Java Mail to create an embedded SMTP server. 
+<br>
+You can configure your own settings in the yaml file depending on your email provider or you can disable Java Mail altogether.
+
 
 ## Built With
 
@@ -111,7 +118,7 @@ Keep in mind that both authorization and backend server's pom.xml is configured 
 
 
 
-## Known Bugs
+## Known Bugs and Issues
 
 * CORS filter allows requests from every url.
 * You might be interested is not functional at this version.

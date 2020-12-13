@@ -24,6 +24,8 @@ The demo is under free hosting, so it may require a bit of a patience :)
 ## Updated
 This project is upgraded to Java 11, Spring Boot 2.3.3 and Angular 10+ and some new features added!
 
+A docker-compose.yml added for you to bootstrap all of the aplication instances in one command!
+
 ## About This Project
 
 * You can browse items or select an item from the showcase and preview.
@@ -52,6 +54,9 @@ Locally installed MySQL or a MySQL server.
 Compatible IDE, Intellij IDEA recommended for this project.
 
 ```
+
+If you want to run the Dockerized version keep in mind that you must install Docker.
+Also please note that booting up with docker-compose might take approx. 10-30min depending on your internet connection. After the initial setup, all other subsequent docker-compose commands will run much faster due to caching.
 
 ### Installing
 
@@ -95,6 +100,18 @@ Keep in mind that both authorization and backend server's pom.xml is configured 
 This project uses Java Mail to create an embedded SMTP server. 
 <br>
 You can configure your own settings in the yaml file depending on your email provider or you can disable Java Mail altogether.
+<br>
+
+For Docker
+
+```
+In the root folder run the following command
+
+docker-compose up
+
+If you want to use development versions of the Dockerfiles, you need to setup docker-compose-yml to build using Dockerfile.dev.
+
+```
 
 
 ## Built With
@@ -114,6 +131,9 @@ You can configure your own settings in the yaml file depending on your email pro
 * [MySQL](https://www.mysql.com/) - MySQL Database
 * [Connector/J](https://dev.mysql.com/downloads/connector/j/5.1.html) - Connecting to MySQL Database Server
 * [Maven](https://maven.apache.org/) - Dependency Management
+* [Docker](https://www.docker.com/) - Containerized Apps
+* [Docker Compose](https://docs.docker.com/compose/) -  Running multi-container Docker applications
+
 
 
 

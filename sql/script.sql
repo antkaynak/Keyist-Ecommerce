@@ -1,3 +1,7 @@
+use keyist;
+
+drop table if exists color;
+
 create table color
 (
     id   int auto_increment
@@ -10,6 +14,8 @@ create table color
         unique (name)
 );
 
+drop table if exists discount;
+
 create table discount
 (
     id               int auto_increment
@@ -20,6 +26,8 @@ create table discount
     constraint code
         unique (code)
 );
+
+drop table if exists oauth_access_token;
 
 create table oauth_access_token
 (
@@ -33,6 +41,8 @@ create table oauth_access_token
     refresh_token     varchar(255) null
 );
 
+drop table if exists oauth_approvals;
+
 create table oauth_approvals
 (
     userId         varchar(255)                            null,
@@ -40,8 +50,10 @@ create table oauth_approvals
     scope          varchar(255)                            null,
     status         varchar(10)                             null,
     expiresAt      timestamp default CURRENT_TIMESTAMP     not null on update CURRENT_TIMESTAMP,
-    lastModifiedAt timestamp default '0000-00-00 00:00:00' not null
+    lastModifiedAt timestamp not null
 );
+
+drop table if exists oauth_client_details;
 
 create table oauth_client_details
 (
@@ -59,6 +71,8 @@ create table oauth_client_details
     autoapprove             varchar(255)  null
 );
 
+drop table if exists oauth_client_token;
+
 create table oauth_client_token
 (
     token_id          varchar(255) null,
@@ -69,11 +83,15 @@ create table oauth_client_token
     client_id         varchar(255) null
 );
 
+drop table if exists oauth_code;
+
 create table oauth_code
 (
     code           varchar(255) null,
     authentication mediumblob   null
 );
+
+drop table if exists oauth_refresh_token;
 
 create table oauth_refresh_token
 (
@@ -81,6 +99,8 @@ create table oauth_refresh_token
     token          mediumblob   null,
     authentication mediumblob   null
 );
+
+drop table if exists product_category;
 
 create table product_category
 (
@@ -90,6 +110,8 @@ create table product_category
     constraint name
         unique (name)
 );
+
+drop table if exists product;
 
 create table product
 (
@@ -109,6 +131,8 @@ create table product
 
 create index category_id
     on product (category_id);
+
+drop table if exists product_variant;
 
 create table product_variant
 (
@@ -133,6 +157,8 @@ create table product_variant
         foreign key (product_id) references product (id)
 );
 
+drop table if exists user;
+
 create table user
 (
     id                int auto_increment
@@ -152,6 +178,8 @@ create table user
     constraint email
         unique (email)
 );
+
+drop table if exists cart;
 
 create table cart
 (
@@ -175,6 +203,8 @@ create index discount_id
 create index user_id
     on cart (user_id);
 
+drop table if exists cart_item;
+
 create table cart_item
 (
     id                 int auto_increment
@@ -190,6 +220,8 @@ create table cart_item
 
 create index cart_id
     on cart_item (cart_id);
+
+drop table if exists orders;
 
 create table orders
 (
@@ -217,6 +249,8 @@ create table orders
         foreign key (discount_id) references discount (id)
 );
 
+drop table if exists order_detail;
+
 create table order_detail
 (
     id                 int auto_increment
@@ -239,6 +273,8 @@ create index discount_id
 create index user_id
     on orders (user_id);
 
+drop table if exists password_reset_token;
+
 create table password_reset_token
 (
     id          int auto_increment
@@ -252,6 +288,8 @@ create table password_reset_token
         foreign key (user_id) references user (id)
 );
 
+drop table if exists verification_token;
+
 create table verification_token
 (
     id          int auto_increment
@@ -263,4 +301,8 @@ create table verification_token
         foreign key (user_id) references user (id)
 );
 
-
+INSERT INTO keyist.oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove) VALUES ('test', 'resource-server-rest-api', '$2a$04$v8DNBoc36pw4c7b7Xyq/aeSpGneF9WciZUI9FibVz0neksUcPBXVS', 'read,write', 'password,authorization_code,refresh_token,implicit', null, 'USER', 10800, 2592000, null, null);
+INSERT INTO keyist.product_category (id, name) VALUES (1, 'Test');
+INSERT INTO keyist.color (id, name, hex) VALUES (1, 'red', '#ff144b');
+INSERT INTO keyist.product (id, category_id, sku, name, url, long_desc, date_created, last_updated, unlimited) VALUES (1, 1, '000-0001', 'Test', 'test', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s. ', '2018-05-18 09:50:48', '2020-10-22 01:55:43', 1);
+INSERT INTO keyist.product_variant (id, product_id, color_id, width, height, price, composition, cargo_price, tax_percent, sell_count, stock, live, image, thumb) VALUES (1, 1, 1, '4cm', '10cm', 9.99, 'Copper 70%, Zinc 30%', 5, 10, 6, 1000, 1, 'image-url-here', 'image-url-here');

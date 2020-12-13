@@ -1,0 +1,11 @@
+# Use this version if you want to use your local maven cache.
+# Good if you have low internet connection.
+# Before building, make sure you locally build authorization_server and generate a jar file
+FROM adoptopenjdk:11-jre-hotspot
+
+WORKDIR /app
+
+COPY *.jar authorization_server.jar
+
+EXPOSE 8081
+ENTRYPOINT ["java", "-jar", "authorization_server.jar"]

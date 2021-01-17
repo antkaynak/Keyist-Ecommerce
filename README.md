@@ -1,6 +1,6 @@
 # Keyist Ecommerce
 
-Demo is now available at https://keyist.tech 🔑
+Demo is now available at https://keyist-frontend.web.app/ 🔑
 
 
 ![alt text](https://github.com/antkaynak/Keyist-Ecommerce/blob/master/screen_shots/detail.png)

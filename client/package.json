@@ -22,7 +22,7 @@
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
     "@ngrx/effects": "^10.0.1",
     "@ngrx/store": "^10.0.1",
-    "bootstrap": "^4.5.3",
+    "bootstrap": "^4.6.0",
     "font-awesome": "^4.7.0",
     "js-cookie": "^2.2.1",
     "rxjs": "~6.6.0",

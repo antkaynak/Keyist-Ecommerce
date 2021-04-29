@@ -1,0 +1,88 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/resource_server"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: com.nimbusds:oauth2-oidc-sdk
+    versions:
+    - "8.34"
+    - "8.36"
+    - "9.1"
+    - 9.2.1
+    - 9.2.2
+    - 9.2.3
+    - "9.3"
+    - 9.3.1
+    - 9.3.3
+  - dependency-name: org.springframework.boot:spring-boot-starter-parent
+    versions:
+    - 2.4.2
+    - 2.4.3
+    - 2.4.4
+- package-ecosystem: maven
+  directory: "/authorization_server"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.springframework.boot:spring-boot-starter-parent
+    versions:
+    - 2.4.2
+    - 2.4.3
+    - 2.4.4
+- package-ecosystem: npm
+  directory: "/client"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "@angular/cli"
+    versions:
+    - 11.1.1
+    - 11.1.2
+    - 11.1.4
+    - 11.2.0
+    - 11.2.1
+    - 11.2.2
+    - 11.2.3
+    - 11.2.4
+    - 11.2.5
+    - 11.2.6
+    - 11.2.7
+    - 11.2.8
+  - dependency-name: y18n
+    versions:
+    - 4.0.1
+  - dependency-name: "@types/node"
+    versions:
+    - 14.14.22
+    - 14.14.25
+    - 14.14.28
+    - 14.14.31
+    - 14.14.32
+    - 14.14.34
+    - 14.14.35
+    - 14.14.37
+  - dependency-name: karma
+    versions:
+    - 6.0.1
+    - 6.0.3
+    - 6.1.0
+    - 6.1.1
+    - 6.2.0
+    - 6.3.1
+  - dependency-name: "@types/jasmine"
+    versions:
+    - 3.6.3
+    - 3.6.4
+    - 3.6.6
+    - 3.6.7
+  - dependency-name: "@ng-bootstrap/ng-bootstrap"
+    versions:
+    - 8.0.3
+  - dependency-name: tslib
+    versions:
+    - 2.1.0

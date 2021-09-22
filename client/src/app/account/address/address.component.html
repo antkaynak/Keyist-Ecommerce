@@ -4,7 +4,6 @@
   </div>
   <hr>
   <div *ngIf="innerLoading" class="loader"></div>
-
   <div *ngIf="!innerLoading">
     <div><title>Sample Header</title></div>
     <form [formGroup]="addressForm" (ngSubmit)="onSubmitAddressForm()">

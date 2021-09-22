@@ -2,7 +2,10 @@
   img {
     width: 100%;
 
-    height: 33px;
+    
+    height: 350px;
+    ss
+
   }
 
   ngb-carousel {
@@ -11,7 +14,8 @@
 
   @media only screen and (max-width: 767px) {
     img {
-      height: 450px;
+      // height: 450px;
+      height: 440px;
     }
   }
 }
